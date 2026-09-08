@@ -1,0 +1,6 @@
+# Dev-Artefakte
+nohup.out
+*.log
+
+# Tooling-Metadaten
+.freebuff/

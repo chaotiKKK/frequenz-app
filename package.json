@@ -1,0 +1,9 @@
+{
+  "name": "frequenz-app",
+  "version": "1.0.0",
+  "description": "Töne für Tiere, Insekten & Pflanzen — mit Not-Aus und Visualisierung",
+  "private": true,
+  "scripts": {
+    "test": "node --test"
+  }
+}

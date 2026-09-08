@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#101A15">
+<title>Frequenz-App — Töne für Tiere, Insekten & Pflanzen</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="eyebrow">Feldinstrument · Ton &amp; Artenschutz</div>
+    <h1>Frequenz-App</h1>
+    <p>Töne für Tauben, Sittiche, Hunde, Insekten &amp; Pflanzen</p>
+  </div>
+  <button id="btnEstop" class="estop" type="button" title="Stoppt sofort alle Töne und sperrt die App">
+    <span class="estop-ring"></span>
+    <span class="estop-label">NOT-AUS</span>
+    <span class="estop-sub">alles sofort stumm</span>
+  </button>
+  <button id="btnInstall" class="install-chip hidden" type="button" title="App auf dem Startbildschirm installieren">⬇ Installieren</button>
+</header>
+
+<main>
+
+  <!-- ============ ZIEL-KACHELN ============ -->
+  <section class="targets" id="targets" aria-label="Ziele">
+    <!-- Kacheln werden von js/targets.js erzeugt -->
+  </section>
+
+  <!-- ============ STEUERUNG ============ -->
+  <section class="panel">
+    <div class="panel-head">
+      <h2 id="panelTitle">Ziel wählen</h2>
+      <span id="modeBadge" class="badge hidden"></span>
+      <div class="modebtns" id="modeBtns">
+        <button type="button" data-mode="repel" class="mrep">🛡 Abwehren</button>
+        <button type="button" data-mode="enrich" class="menr">💚 Bereichern</button>
+      </div>
+    </div>
+
+    <div class="panel-grid">
+
+      <div class="ctrl">
+        <label for="freq">Frequenz <span class="unit">Hz</span></label>
+        <input type="range" id="freq" min="0" max="1000" value="0" step="1" aria-label="Frequenz">
+        <div class="big-hz"><span id="hzDisplay">—</span></div>
+        <div class="chips" id="presetChips"></div>
+      </div>
+
+      <div class="ctrl">
+        <label for="vol">Lautstärke</label>
+        <input type="range" id="vol" min="0" max="100" value="60">
+        <div class="hint warn" id="volWarn" hidden>⚠️ Sehr laut — für Menschen unangenehm</div>
+        <label for="wave" class="sub-label">Wellenform</label>
+        <select id="wave">
+          <option value="sine">Sinus (weich)</option>
+          <option value="triangle">Dreieck (tongenerierend)</option>
+          <option value="square">Rechteck (hart/kreisend)</option>
+        </select>
+      </div>
+
+      <div class="ctrl">
+        <label>Modus</label>
+        <div class="modebtns">
+          <button id="btnPlay" type="button" class="play">▶ Ton starten</button>
+          <button id="btnStop" type="button" class="stopbtn">■ Stop</button>
+        </div>
+        <label class="sub-label">Wiedergabeart</label>
+        <select id="pattern">
+          <option value="constant">Dauerton</option>
+          <option value="sweep">Sweep (auf/ab)</option>
+          <option value="chirp">Chirps (kurze Piepser)</option>
+          <option value="chord">Akkord (3 Töne)</option>
+        </select>
+      </div>
+
+      <div class="ctrl">
+        <label>Auto-Stopp</label>
+        <div class="chips" id="timerChips">
+          <button data-min="0" class="chip sel">Aus</button>
+          <button data-min="15" class="chip">15 min</button>
+          <button data-min="30" class="chip">30 min</button>
+          <button data-min="60" class="chip">60 min</button>
+        </div>
+        <div class="hint" id="timerInfo">Kein Auto-Stopp aktiv</div>
+      </div>
+
+    </div>
+
+    <div class="panel-foot">
+      <label class="toggle">
+        <input type="checkbox" id="chkConfirm">
+        <span>Ultraschall > 18 kHz immer bestätigen lassen</span>
+      </label>
+    </div>
+  </section>
+
+  <!-- ============ MÜCKENFALLEN-MODUS ============ -->
+  <section class="panel trap hidden" id="trapSection">
+    <div class="panel-head">
+      <h2>🦟 Fallen-Modus</h2>
+      <span class="badge enr">Weibchen-Flugton</span>
+    </div>
+    <p class="trap-lead">Dauerton im Weibchen-Flugton (400–600 Hz) lockt Mücken-Männchen an — kombiniert mit einem Ventilator ein einfaches DIY-Fallen-Experiment.</p>
+    <div class="trap-run">
+      <div class="chips" id="trapChips">
+        <button class="chip sel" data-min="60">1 h</button>
+        <button class="chip" data-min="120">2 h</button>
+        <button class="chip" data-min="240">4 h</button>
+        <button class="chip" data-min="480">8 h</button>
+      </div>
+      <div class="trap-count" id="trapCount">1:00:00</div>
+      <div class="modebtns">
+        <button id="btnTrapStart" type="button" class="play">🦟 Falle starten</button>
+        <button id="btnTrapStop" type="button" class="stopbtn">■ Falle stoppen</button>
+      </div>
+      <div class="trap-catches">
+        <span>Gefangen:</span>
+        <span class="trap-catch-num" id="trapCatchCount">0</span>
+        <button id="btnTrapCatch" type="button" class="chip" title="Eine gefangene Mücke zählen">+1</button>
+      </div>
+    </div>
+    <label class="toggle trap-duet">
+      <input type="checkbox" id="chkDuet">
+      <span>Duett-Modus — Männchenton (1,25×) gleichzeitig erklingen lassen</span>
+    </label>
+    <div class="hint" id="wakeStatus"></div>
+    <div class="hint" id="trapStatus">Falle bereit — Laufzeit wählen und starten.</div>
+    <details class="trap-guide">
+      <summary>📖 Anleitung: Falle aufstellen &amp; bauen</summary>
+      <div class="trap-guide-body">
+        <h3>🧰 DIY-Fallenbau (Ventilator-Falle)</h3>
+        <ol>
+          <li>Kleinen Ventilator nehmen (USB reicht) und den Frontring mit Klebefolie bespannen (klebrige Seite zum Luftstrom) oder mit feinem Netz versehen.</li>
+          <li>Ventilator auf ein Tablett stellen, leicht geneigt — Mücken werden vom Luftstrom erfasst und bleiben an der Klebefolie hängen.</li>
+          <li>Handy oder Box daneben aufstellen, Fallen-Modus starten: Der Weibchen-Flugton lenkt Männchen Richtung Luftstrom.</li>
+        </ol>
+        <h3>📍 Positionierung</h3>
+        <ul>
+          <li>Dunkle, windstille Ecke — nah an Brutstätten (Blumentöpfe, Regenwassertonnen, Wasserstellen).</li>
+          <li>Nicht direkt am Ohr aufstellen: Der Dauerton kann nerven — 1–2 m Abstand halten.</li>
+        </ul>
+        <h3>🔊 Audio-Tipp</h3>
+        <ul>
+          <li>Eine externe Box mit gutem Tieftöner gibt 400–600 Hz deutlich voller wieder als ein Handy-Lautsprecher — das verbessert die Lockwirkung spürbar.</li>
+        </ul>
+        <div class="disc">⚠️ Ehrlich gesagt: Der Ton lockt Mücken-Männchen an — das ist ein Experiment, kein Insektizid-Ersatz. Die Wirkung variiert je nach Mückenart und Umgebung.</div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ============ VISUALISIERUNG ============ -->
+  <section class="viz">
+    <div class="viz-head">
+      <h2>Live-Analyse</h2>
+      <div class="legend">
+        <span class="lg"><i class="swatch sw-h"></i>Mensch</span>
+        <span class="lg"><i class="swatch sw-d"></i>Hund</span>
+        <span class="lg"><i class="swatch sw-b"></i>Vogel</span>
+        <span class="lg"><i class="swatch sw-i"></i>Insekt</span>
+      </div>
+    </div>
+
+    <div class="hz-note" id="hzNote">—</div>
+
+    <figure class="tafel">
+      <figcaption class="tafel-cap"><span class="tno">Tafel I</span> Spektrum</figcaption>
+      <canvas id="spectrum" height="180"></canvas>
+    </figure>
+    <figure class="tafel">
+      <figcaption class="tafel-cap"><span class="tno">Tafel II</span> Wellenform</figcaption>
+      <canvas id="oscillo" height="110"></canvas>
+    </figure>
+    <figure class="tafel">
+      <figcaption class="tafel-cap"><span class="tno">Tafel III</span> Hörbereiche (Marker = aktueller Ton)</figcaption>
+      <canvas id="ranges" height="150"></canvas>
+    </figure>
+
+    <div class="learnbar" id="learnBar">
+      <span class="learn-label">🎓 Lern-Modus:</span>
+      <button class="chip learn-btn" data-demo="mensch">🧑 Mensch</button>
+      <button class="chip learn-btn" data-demo="hund">🐕 Hund</button>
+      <button class="chip learn-btn" data-demo="vogel">🦜 Vogel</button>
+      <button class="chip learn-btn" data-demo="insekt">🦟 Mücke</button>
+      <button class="chip learn-btn" data-demo="tour">🎢 Hör-Tour</button>
+    </div>
+    <div class="learn-note" id="learnNote">Klick startet eine langsame Klang-Durchwanderung des Hörbereichs — Tafel III zeigt live, wer gerade zuhört.</div>
+  </section>
+
+  <!-- ============ INFO ============ -->
+  <section class="info" id="targetInfo">
+    <h2>Über das gewählte Ziel</h2>
+    <div id="infoBody"><p class="hint">Erst eine Kachel wählen, dann hier Infos &amp; Studien-Hinweise.</p></div>
+  </section>
+
+  <!-- ============ SOUND-JOURNAL ============ -->
+  <section class="panel journal" id="journalSection">
+    <div class="panel-head">
+      <h2>Sound-Journal</h2>
+      <span class="badge enr" id="journalCount">0 Einträge</span>
+      <div class="modebtns">
+        <button id="btnJournalCsv" type="button" class="menr">⬇ CSV exportieren</button>
+        <button id="btnJournalClear" type="button" class="stopbtn">Journal leeren</button>
+      </div>
+    </div>
+    <p class="hint" id="journalEmpty">Noch keine Wiedergaben — starte einen Ton, und er erscheint hier.</p>
+    <div class="journal-wrap hidden" id="journalWrap">
+      <table class="journal-table">
+        <thead>
+          <tr><th>Startzeit</th><th>Ziel</th><th>Modus</th><th>Frequenz</th><th>Art</th><th>Dauer</th><th>Fang</th></tr>
+        </thead>
+        <tbody id="journalBody"></tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ SPERR-BANNER ============ -->
+<div id="lockBanner" class="lockbanner hidden">
+  <div class="lockbox">
+    <div class="lock-emoji">🔒</div>
+    <h2>Alles gestoppt &amp; gesperrt</h2>
+    <p>Der Not-Aus-Knopf wurde gedrückt. Kein Ton ist möglich.</p>
+    <button id="btnUnlock" type="button" class="unlock">🔓 Entsperren</button>
+  </div>
+</div>
+
+<footer>
+  <p>Experimentier-Tool. Kein Ersatz für wirksamen Schutz (z. B. Mückenschutzmittel). Bitte Haustiere nicht dauerhaft beschallen.</p>
+</footer>
+
+<script src="js/sw-config.js"></script>
+<script src="js/targets.js"></script>
+<script src="js/journal.js"></script>
+<script src="js/audio-engine.js"></script>
+<script src="js/visualizer.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
