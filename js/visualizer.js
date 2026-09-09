@@ -7,11 +7,12 @@
 
 const Visualizer = (() => {
   const F_MIN = 20, F_MAX = 48000;
-  // Messtafel-Ästhetik: Creme-Grund, Tinten-Linien, Arten-Farben (aus targets.js)
-  const PLATE = "#E5E3D4";
-  const INK = "#22271F";
-  const INK_SOFT = "rgba(90, 97, 82, .85)";
-  const GRID = "rgba(90, 97, 82, .18)";
+  // Tafelwerk-Ästhetik: helle Platte, Tief-Tintengrün, Ochre/ Burgundy-Nadeln
+  const PLATE = "#FBF8F0";
+  const INK = "#1E3328";
+  const INK_SOFT = "rgba(74, 93, 80, .85)";
+  const GRID = "rgba(74, 93, 80, .16)";
+  const NEEDLE = "#7A2E2E";   // Burgundy-Marker
   let spectrum, oscillo, ranges;
   let sctx, octx, rctx;
   let running = false;
@@ -50,7 +51,7 @@ const Visualizer = (() => {
     for (const r of HEARING_RANGES) {
       if (f >= r.from && f <= r.to) return r.color;
     }
-    return "#A9A895";   // neutrale Tinte außerhalb aller Hörbereiche
+    return "#B9B29A";   // neutrale Tinte außerhalb aller Hörbereiche
   }
 
   /* ---------- 1) Spektrum ---------- */
@@ -74,7 +75,7 @@ const Visualizer = (() => {
 
     if (!an) {
       sctx.fillStyle = INK_SOFT;
-      sctx.font = "12px Instrument Sans, sans-serif";
+      sctx.font = "italic 12px " + getComputedStyle(document.body).fontFamily;
       sctx.fillText("Audio startet, sobald ein Ton gespielt wird …", 12, 22);
       return;
     }
@@ -147,7 +148,7 @@ const Visualizer = (() => {
       const x0 = logPos(r.from) * W;
       const x1 = logPos(Math.min(r.to, F_MAX)) * W;
       // Zeilengrund
-      rctx.fillStyle = "rgba(34, 39, 31, .05)";
+      rctx.fillStyle = "rgba(30, 51, 40, .05)";
       rctx.fillRect(4, y + 8, W - 8, rowH - 16);
       // Hörbereich mit Schraffur-Anmutung (halbtransparente Fläche)
       rctx.fillStyle = r.color;
@@ -165,14 +166,14 @@ const Visualizer = (() => {
       rctx.fillText(label, Math.max(8, x0 + 4), y + rowH / 2 + 4);
     });
 
-    // Marker: aktueller Ton (rote Tinte)
+    // Marker: aktueller Ton (Burgundy-Nadel)
     const f = AudioEngine.getFreq();
     const mx = logPos(f) * W;
-    rctx.strokeStyle = "#B3402E";
+    rctx.strokeStyle = NEEDLE;
     rctx.lineWidth = 2;
     rctx.beginPath(); rctx.moveTo(mx, 2); rctx.lineTo(mx, H - 2); rctx.stroke();
     // Marker-Spitze
-    rctx.fillStyle = "#B3402E";
+    rctx.fillStyle = NEEDLE;
     rctx.beginPath(); rctx.moveTo(mx - 4, 2); rctx.lineTo(mx + 4, 2); rctx.lineTo(mx, 10); rctx.closePath(); rctx.fill();
 
     // Hz-Skala unten

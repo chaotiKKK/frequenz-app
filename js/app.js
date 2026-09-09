@@ -173,12 +173,15 @@ document.addEventListener("visibilitychange", () => {
 
 function buildTiles() {
   const wrap = $("targets");
-  TARGETS.forEach(t => {
+  const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X",
+                 "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII"];  // Tafelnummern
+  TARGETS.forEach((t, i) => {
     const el = document.createElement("button");
     el.className = "tile";
     el.type = "button";
     el.dataset.target = t.id;
     el.innerHTML =
+      `<span class="tile-no">TAFEL ${ROMAN[i] ?? i + 1}</span>` +
       `<span class="tile-icon">${t.icon}</span>` +
       `<span class="tile-name">${t.name}</span>` +
       `<span class="tile-sub">${t.sub}</span>`;

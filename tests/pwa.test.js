@@ -17,8 +17,8 @@ test("Manifest: Name, Standalone, Farben, Startseite", () => {
   assert.ok(manifest.short_name, "short_name fehlt");
   assert.equal(manifest.display, "standalone");
   assert.equal(manifest.start_url, "./");
-  assert.equal(manifest.theme_color, "#101A15");
-  assert.equal(manifest.background_color, "#101A15");
+  assert.equal(manifest.theme_color, "#F2EDDF");
+  assert.equal(manifest.background_color, "#F2EDDF");
   assert.equal(manifest.lang, "de");
 });
 
@@ -68,22 +68,22 @@ function pngIdatLength(buf) {
   return idat;
 }
 
-test("Icon-Pixel: Nacht-Grund + bernsteinfarbige Welle sind wirklich im Bild", () => {
+test("Icon-Pixel: Papier-Grund + Ochre-Welle sind wirklich im Bild", () => {
   const buf = fs.readFileSync(path.join(ROOT, "icons/icon-512.png"));
   const px = inflateIcon(buf);
-  // Mitte-Links (Fläche) sollte dem Nachtgrund #101A15 nahekommen
+  // Mitte-Links (Fläche) sollte dem Tafelwerk-Papier #F2EDDF nahekommen
   const mid = pixelAt(px, 20, 256, 512);
-  assert.ok(Math.abs(mid.r - 16) < 20 && Math.abs(mid.g - 26) < 20 && Math.abs(mid.b - 21) < 20,
+  assert.ok(Math.abs(mid.r - 242) < 20 && Math.abs(mid.g - 237) < 20 && Math.abs(mid.b - 223) < 20,
     `Hintergrundfarbe falsch: ${JSON.stringify(mid)}`);
-  // Irgendwo muss ein bernsteinfarbiger Pixel (#E0A458) existieren (die Welle)
+  // Irgendwo muss ein ochrefarbener Pixel (#C79A3B) existieren (die Welle)
   let amber = false;
   for (let y = 0; y < 512 && !amber; y += 4) {
     for (let x = 0; x < 512 && !amber; x += 4) {
       const p = pixelAt(px, x, y, 512);
-      if (Math.abs(p.r - 224) < 25 && Math.abs(p.g - 164) < 25 && Math.abs(p.b - 88) < 25) amber = true;
+      if (Math.abs(p.r - 199) < 25 && Math.abs(p.g - 154) < 25 && Math.abs(p.b - 59) < 25) amber = true;
     }
   }
-  assert.ok(amber, "kein bernsteinfarbiger Wellen-Pixel gefunden");
+  assert.ok(amber, "kein ochrefarbener Wellen-Pixel gefunden");
 });
 
 /* Minimaler PNG-Reader für unsere eigenen Dateien (RGB 8bit, Filter 0). */

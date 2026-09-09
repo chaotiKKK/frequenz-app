@@ -1,12 +1,11 @@
 /* ============================================================
-   The Naturalist's Listening Instrument
-   Nachtgrund (botanisches Grün-Schwarz) + Flechten-Papier-Platten
-   Fraunces (Display) · Instrument Sans (Text) · Spline Sans Mono (Zahlen)
-   Arten-Codierung: Flechte=Mensch · Bernstein=Hund · Dämmerung=Vogel · Motte=Insekt
+   TAFELWERK — The Naturalist's Field Atlas
+   Tageslicht-Papier statt Nachtglas: Creme-Platten, Tief-Tintengrün,
+   Burgundy-Akzente, Ochre-Marker. Museums-Typografie.
+   Fraunces (Display) · Source Serif 4 (Text) · Spline Sans Mono (Zahlen)
 
    Token-Hierarchie (Design-System-Prinzipien, nativ ohne Build-Step):
-     Brand      --night, --paper, --ink, --lichen, --amber, --dusk,
-                --moth, --stop …  (die Materie)
+     Brand      --paper, --plate, --ink, --burgundy, --ochre … (die Materie)
      Semantic   --color-background, --color-card, --color-on-card …
                 (der Zweck; Komponenten referenzieren NUR diese Ebene)
      Komponente --radius-*, Schatten (das Konkrete)
@@ -17,79 +16,81 @@
 
 :root {
   /* ---------- Brand: die Materie ---------- */
-  --night: #101A15;
-  --night-2: #0D1712;
-  --night-line: #2A3830;
-  --night-line-soft: #1F2B24;
+  --paper: #F2EDDF;        /* Seite: warmes Creme */
+  --plate: #FBF8F0;        /* Platten/Panels: heller */
+  --plate-deep: #EAE4D2;   /* vertiefte Felder */
+  --plate-edge: #C9C2AC;   /* Plattenkante */
 
-  --paper: #E5E3D4;
-  --paper-edge: #CFCDB9;
-  --paper-deep: #DBD9C9;
-  --ink: #22271F;
-  --ink-soft: #5A6152;
+  --ink: #1E3328;          /* Tief-Tintengrün */
+  --ink-soft: #4A5D50;
+  --ink-body: #35473C;     /* Fließtext */
+  --ink-line: #B9B29A;     /* dünne Tintenlinien */
 
-  --lichen: #9FB88A;       /* Mensch   */
-  --amber:  #E0A458;       /* Hund     */
-  --dusk:   #9A8FC9;       /* Vogel    */
-  --moth:   #E08794;       /* Insekt   */
+  --burgundy: #7A2E2E;     /* Akzent / Abwehr / NOT-AUS */
+  --burgundy-hi: #94413F;
+  --ochre: #C79A3B;        /* Marker / Bereichern / aktiv */
+  --ochre-deep: #96742A;
 
-  --stop:   #B3402E;
-  --stop-hi: #D4573F;
+  --lichen: #6E8757;       /* Mensch   */
+  --amber:  #C79A3B;       /* Hund (bleibt Kurve) */
+  --dusk:   #7B6FA8;       /* Vogel    */
+  --moth:   #C46A78;       /* Insekt   */
 
   /* ---------- Brand: OKLCH (identische Farbpunkte, exakt konvertiert) ---------- */
-  --night:        oklch(20.61% 0.0177 162.64);
-  --night-2:      oklch(19.28% 0.0179 162.41);
-  --night-line:   oklch(32.53% 0.0233 159.73);
-  --night-line-soft: oklch(27.54% 0.0210 159.07);
+  --paper:      oklch(94.09% 0.0222 95.75);
+  --plate:      oklch(97.48% 0.0142 92.02);
+  --plate-deep: oklch(91.26% 0.0246 91.66);
+  --plate-edge: oklch(80.20% 0.0334 95.66);
 
-  --paper:      oklch(91.33% 0.0202 100.60);
-  --paper-edge: oklch(84.45% 0.0272 102.30);
-  --paper-deep: oklch(88.25% 0.0216 101.02);
-  --ink:        oklch(26.49% 0.0162 133.71);
-  --ink-soft:   oklch(48.18% 0.0250 127.76);
+  --ink:      oklch(30.06% 0.0362 156.23);
+  --ink-soft: oklch(46.03% 0.0356 155.14);
+  --ink-body: oklch(37.42% 0.0348 152.53);
+  --ink-line: oklch(75.99% 0.0338 90.13);
 
-  --lichen: oklch(75.16% 0.0695 131.13);   /* Mensch   */
-  --amber:  oklch(76.07% 0.1171 70.94);    /* Hund     */
-  --dusk:   oklch(68.11% 0.0851 292.69);   /* Vogel    */
-  --moth:   oklch(72.05% 0.1097 10.76);    /* Insekt   */
+  --burgundy:    oklch(38.51% 0.0880 20.09);
+  --burgundy-hi: oklch(46.41% 0.1010 19.03);
+  --ochre:       oklch(70.42% 0.1110 71.86);
+  --ochre-deep:  oklch(55.99% 0.0974 78.03);
 
-  --stop:    oklch(52.98% 0.1531 31.43);
-  --stop-hi: oklch(61.42% 0.1630 32.74);
+  --lichen: oklch(57.85% 0.0746 118.37);
+  --amber:  oklch(70.42% 0.1110 71.86);
+  --dusk:   oklch(55.42% 0.0773 285.29);
+  --moth:   oklch(62.24% 0.1077 8.62);
 
   /* ---------- Semantic: der Zweck ---------- */
-  --color-background:        var(--night);
-  --color-background-deep:   var(--night-2);
-  --color-foreground:        var(--paper);          /* Text auf Nachtgrund */
-  --color-muted-foreground:  oklch(70.15% 0.0254 139.44);  /* #97A394, Text auf Nacht */
+  --color-background:        var(--paper);
+  --color-background-deep:   var(--plate-deep);
+  --color-foreground:        var(--ink);            /* Text auf Papier */
+  --color-muted-foreground:  var(--ink-soft);
 
-  --color-card:              var(--paper);          /* Papier-Platte */
-  --color-card-deep:         var(--paper-deep);
+  --color-card:              var(--plate);          /* Papier-Platte */
+  --color-card-deep:         var(--plate-deep);
   --color-on-card:           var(--ink);
   --color-on-card-muted:     var(--ink-soft);
-  --color-on-card-body:      oklch(37.94% 0.0249 129.22);  /* #3E4537, Fließtext */
+  --color-on-card-body:      var(--ink-body);
 
-  --color-border-strong:     var(--paper-edge);
-  --color-border-soft:       var(--night-line);
+  --color-border-strong:     var(--plate-edge);
+  --color-border-soft:       var(--ink-line);
 
-  --color-action:            oklch(61.64% 0.0683 126.90);  /* #7A8D60, Start/Bereichern */
-  --color-action-hover:      oklch(56.38% 0.0652 127.22);  /* #6B7D53 */
-  --color-action-deep:       oklch(51.08% 0.0660 129.62);  /* #5A6E45 */
-  --color-on-action:         oklch(96.77% 0.0159 102.83);  /* #F6F5E9 */
+  --color-action:            var(--ochre);          /* Start/Bereichern */
+  --color-action-hover:      var(--ochre-deep);
+  --color-action-deep:       var(--ochre-deep);
+  --color-on-action:         oklch(97.48% 0.0142 92.02);   /* #FBF8F0 */
 
-  --color-destructive:       var(--stop);
-  --color-destructive-hover: var(--stop-hi);
-  --color-on-destructive:    oklch(97.41% 0.0143 50.81);   /* #FFF4EE */
-  --color-ring:              var(--amber);
+  --color-destructive:       var(--burgundy);
+  --color-destructive-hover: var(--burgundy-hi);
+  --color-on-destructive:    oklch(97.48% 0.0142 92.02);   /* #FBF8F0 */
+  --color-ring:              var(--burgundy-hi);
 
   /* ---------- Komponente: Konkrete ---------- */
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 14px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
   --radius-pill: 999px;
-  --shadow-card: 0 8px 26px rgba(0, 0, 0, .28);
+  --shadow-card: 0 2px 10px rgba(30, 51, 40, .10);
 
   --disp: "Fraunces", Georgia, serif;
-  --body: "Instrument Sans", system-ui, sans-serif;
+  --body: "Source Serif 4", Georgia, serif;
   --mono: "Spline Sans Mono", ui-monospace, monospace;
 }
 
@@ -97,8 +98,8 @@
 
 body {
   background:
-    radial-gradient(1100px 520px at 88% -8%, rgba(154, 143, 201, .07), transparent 60%),
-    radial-gradient(900px 460px at 2% 108%, rgba(224, 164, 88, .05), transparent 55%),
+    radial-gradient(1100px 520px at 88% -8%, rgba(122, 46, 46, .05), transparent 60%),
+    radial-gradient(900px 460px at 2% 108%, rgba(199, 154, 59, .06), transparent 55%),
     var(--color-background);
   overflow-x: hidden;  /* dekorative estop-ring-Ausläufer klingen — kein Horizontal-Scroll */
   color: var(--color-foreground);
@@ -128,14 +129,15 @@ html { overflow-x: hidden; }  /* ScrollWidth-Report auf Dokumentebene (estop-Rin
 }
 
 /* ---------- Kopfbereich ---------- */
+/* ---------- Titelblatt ---------- */
 header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 14px;
-  padding: 20px 20px 16px;
-  border-bottom: 1px solid var(--color-border-soft);
-  background: linear-gradient(180deg, var(--color-background-deep), var(--color-background));
+  padding: 26px 20px 18px;
+  border-bottom: 3px double var(--ink);
+  background: var(--color-background);
   position: sticky;
   top: 0;
   z-index: 50;
@@ -143,30 +145,39 @@ header {
 .eyebrow {
   font-family: var(--mono);
   font-size: 10.5px;
-  letter-spacing: .22em;
+  letter-spacing: .26em;
   text-transform: uppercase;
-  color: var(--lichen);
-  margin-bottom: 4px;
+  color: var(--burgundy);
+  margin-bottom: 5px;
 }
 .brand h1 {
   font-family: var(--disp);
-  font-weight: 600;
-  font-size: 27px;
+  font-weight: 700;
+  font-size: 30px;
   letter-spacing: .01em;
+  color: var(--ink);
 }
-.brand p { color: var(--color-muted-foreground); font-size: 12.5px; margin-top: 2px; }
+.brand h1::after {
+  content: "";
+  display: block;
+  width: 68px;
+  height: 3px;
+  margin-top: 5px;
+  background: var(--ochre);
+}
+.brand p { color: var(--color-muted-foreground); font-size: 13px; margin-top: 5px; font-style: italic; }
 
-/* ---------- NOT-AUS: bleibt unübersehbar rot ---------- */
+/* ---------- NOT-AUS: bleibt unübersehbar burgundy ---------- */
 .estop {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   min-width: 122px; min-height: 76px;
-  background: radial-gradient(circle at 35% 28%, var(--color-destructive-hover), var(--color-destructive) 58%, #7E2A1D);
-  border: 2px solid #E8A08D;
-  border-radius: var(--radius-lg);
+  background: radial-gradient(circle at 35% 28%, var(--color-destructive-hover), var(--color-destructive) 58%, #521F1F);
+  border: 2px solid #C98D8C;
+  border-radius: 4px;
   color: var(--color-on-destructive); font-weight: 700;
   font-family: var(--mono);
   cursor: pointer;
-  box-shadow: 0 0 22px rgba(179, 64, 46, .45), inset 0 -4px 8px rgba(0, 0, 0, .35);
+  box-shadow: 0 0 18px rgba(122, 46, 46, .4), inset 0 -4px 8px rgba(0, 0, 0, .3);
   transition: transform .08s;
   position: relative;
 }
@@ -175,8 +186,8 @@ header {
 .estop .estop-sub { font-size: 9.5px; opacity: .85; margin-top: 2px; }
 .estop .estop-ring {
   position: absolute; inset: -7px;
-  border: 2px dashed rgba(212, 87, 63, .65);
-  border-radius: 18px;
+  border: 2px dashed rgba(148, 65, 63, .65);
+  border-radius: 8px;
   animation: estopPulse 1.6s infinite;
   pointer-events: none;
 }
@@ -196,29 +207,40 @@ main { max-width: 1000px; margin: 0 auto; padding: 0 18px; }
   margin: 20px 0;
 }
 .tile {
-  background: var(--color-background-deep);
-  border: 1px solid var(--color-border-soft);
-  border-radius: var(--radius-md);
+  background: var(--color-card);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 2px;
+  outline: 1px solid var(--ink-line);
+  outline-offset: 3px;
   padding: 13px 10px 11px;
   cursor: pointer;
   text-align: center;
-  transition: border-color .15s, transform .12s, background .15s;
+  transition: border-color .15s, transform .12s, outline-color .15s;
   position: relative;
   overflow: hidden;
 }
-.tile:hover { transform: translateY(-2px); border-color: #3D5144; }
+.tile:hover { transform: translateY(-2px); outline-color: var(--ink-soft); }
 .tile.sel {
-  background: var(--color-card);
-  border-color: var(--color-border-strong);
+  border-color: var(--ink);
+  outline: 2px solid var(--ochre);
+  outline-offset: 3px;
   color: var(--color-on-card);
-  box-shadow: 0 6px 22px rgba(0, 0, 0, .35);
+  box-shadow: var(--shadow-card);
 }
 .tile.sel .tile-sub { color: var(--color-on-card-muted); }
+.tile .tile-no {
+  display: block;
+  font-family: var(--mono);
+  font-size: 8.5px;
+  letter-spacing: .18em;
+  color: var(--ink-soft);
+  margin-bottom: 3px;
+}
 .tile.playing::after {
   content: "";
   position: absolute; inset: 0;
-  border-radius: var(--radius-md);
-  border: 2px solid var(--amber);
+  border-radius: 2px;
+  border: 2px solid var(--ochre);
   animation: tilePulse 1.1s infinite;
   pointer-events: none;
 }
@@ -226,8 +248,8 @@ main { max-width: 1000px; margin: 0 auto; padding: 0 18px; }
   0% { opacity: .9; } 100% { opacity: 0; }
 }
 .tile-icon { font-size: 30px; display: block; }
-.tile-name { font-family: var(--disp); font-weight: 600; font-size: 16.5px; margin-top: 4px; display: block; }
-.tile-sub { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: #7E8B79; display: block; margin-top: 2px; }
+.tile-name { font-family: var(--disp); font-weight: 600; font-size: 17px; margin-top: 4px; display: block; color: var(--ink); }
+.tile-sub { font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-soft); display: block; margin-top: 3px; }
 
 /* ---------- Papier-Platten (Panels) ---------- */
 .panel, .info {
@@ -253,7 +275,7 @@ main { max-width: 1000px; margin: 0 auto; padding: 0 18px; }
   text-transform: uppercase;
   color: var(--color-on-card-muted);
 }
-.variant-chip.sel { background: var(--dusk); border-color: var(--dusk); color: var(--color-background); }
+.variant-chip.sel { background: var(--ink); border-color: var(--ink); color: var(--paper); }
 .panel-head h2, .info h2 {
   font-family: var(--disp);
   font-weight: 600;
@@ -271,8 +293,8 @@ main { max-width: 1000px; margin: 0 auto; padding: 0 18px; }
   padding: 3px 10px;
   border-radius: var(--radius-pill);
 }
-.badge.rep { background: rgba(179, 64, 46, .14); color: var(--color-destructive); }
-.badge.enr { background: rgba(122, 141, 96, .2); color: var(--color-action-deep); }
+.badge.rep { background: rgba(122, 46, 46, .12); color: var(--color-destructive); }
+.badge.enr { background: rgba(199, 154, 59, .18); color: var(--color-action-deep); }
 .badge.pulsing { animation: tilePulse 1.1s infinite; }
 
 /* Modus-Schalter */
@@ -346,7 +368,7 @@ input[type="range"] { width: 100%; accent-color: var(--color-action); height: 26
   cursor: pointer;
 }
 .chip:hover { border-color: var(--color-action); }
-.chip.sel { background: var(--color-background); color: var(--color-foreground); border-color: var(--color-background); font-weight: 600; }
+.chip.sel { background: var(--ink); color: var(--paper); border-color: var(--ink); font-weight: 600; }
 
 select {
   width: 100%;
@@ -371,19 +393,19 @@ select {
 }
 .play { background: var(--color-action); color: var(--color-on-action); }
 .play:hover { background: var(--color-action-hover); }
-.play.on { background: var(--color-background); color: var(--color-foreground); }
-.stopbtn { background: transparent; color: var(--color-destructive); border-color: rgba(179, 64, 46, .4); }
-.stopbtn:hover { background: rgba(179, 64, 46, .08); }
+.play.on { background: var(--ink); color: var(--paper); }
+.stopbtn { background: transparent; color: var(--color-destructive); border-color: rgba(122, 46, 46, .4); }
+.stopbtn:hover { background: rgba(122, 46, 46, .07); }
 
 .hint { font-size: 12.5px; color: var(--color-on-card-muted); margin-top: 6px; }
-.hint.warn { color: #9C4A1F; }
+.hint.warn { color: var(--ochre-deep); }
 
 .panel-foot { margin-top: 16px; border-top: 1px dashed var(--color-border-strong); padding-top: 12px; }
 .toggle { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--color-on-card-muted); cursor: pointer; }
 .toggle input { accent-color: var(--color-action); }
 
 /* ---------- Fallen-Modus ---------- */
-.trap { border-color: #B8C4A4; }
+.trap { border-color: var(--ochre); }
 .trap-lead { font-size: 13px; color: var(--color-on-card-muted); margin-bottom: 12px; }
 .trap-run {
   display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
@@ -397,7 +419,7 @@ select {
   font-family: var(--mono);
   font-size: 32px;
   font-weight: 600;
-  color: var(--color-background);
+  color: var(--ink);
   letter-spacing: .04em;
   margin-left: auto;
 }
@@ -407,7 +429,7 @@ select {
   font-family: var(--mono); font-size: 12px; letter-spacing: .08em;
   text-transform: uppercase; color: var(--color-on-card-muted);
 }
-.trap-catch-num { font-size: 22px; font-weight: 600; color: var(--color-background); }
+.trap-catch-num { font-size: 22px; font-weight: 600; color: var(--ink); }
 .trap-catches .chip { padding: 2px 12px; font-weight: 600; }
 .trap-duet { margin-top: 8px; }
 .trap .modebtns .play { min-width: 170px; }
@@ -419,18 +441,20 @@ select {
 .trap-guide-body li { font-size: 13px; color: var(--color-on-card-body); margin-bottom: 4px; }
 .trap-guide-body .disc { margin-top: 10px; }
 
-/* ---------- Messtafeln (dunkle Zone) ---------- */
+/* ---------- Messtafeln (Figuren-Zone) ---------- */
 .viz {
-  background: var(--color-background-deep);
-  border: 1px solid var(--color-border-soft);
-  border-radius: var(--radius-lg);
+  background: var(--color-card);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 2px;
+  outline: 1px solid var(--ink-line);
+  outline-offset: 3px;
   padding: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
 }
 .viz-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
 .viz-head h2 { font-family: var(--disp); font-weight: 600; font-size: 20px; }
 .legend { display: flex; gap: 12px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; letter-spacing: .04em; color: var(--color-muted-foreground); }
-.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; }
+.swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; }
 .sw-h { background: var(--lichen); }
 .sw-d { background: var(--amber); }
 .sw-b { background: var(--dusk); }
@@ -448,14 +472,14 @@ select {
   margin-bottom: 5px;
   padding-left: 2px;
 }
-.tno { color: var(--amber); font-weight: 600; margin-right: 8px; }
+.tno { color: var(--burgundy); font-weight: 600; margin-right: 8px; }
 
 canvas {
   width: 100%;
   display: block;
-  background: #0C130F;
-  border: 1px solid var(--color-border-soft);
-  border-radius: var(--radius-sm);
+  background: var(--plate);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 2px;
 }
 
 /* ---------- Info-Platte ---------- */
@@ -471,11 +495,11 @@ canvas {
 #infoBody .disc {
   margin-top: 10px;
   padding: 10px 12px;
-  background: rgba(224, 164, 88, .16);
-  border-left: 3px solid var(--amber);
-  border-radius: 6px;
+  background: rgba(199, 154, 59, .14);
+  border-left: 3px solid var(--ochre);
+  border-radius: 2px;
   font-size: 12.5px;
-  color: #6B4A1B;
+  color: var(--ochre-deep);
 }
 
 /* ---------- Lern-Modus ---------- */
@@ -490,16 +514,16 @@ canvas {
   text-transform: uppercase;
   color: var(--color-muted-foreground);
 }
-.learn-btn { background: var(--color-background-deep); color: var(--color-foreground); border-color: var(--color-border-soft); }
-.learn-btn:hover { border-color: var(--amber); }
-.learn-btn.sel { background: var(--amber); color: var(--color-background); border-color: var(--amber); font-weight: 600; }
+.learn-btn { background: var(--color-card-deep); color: var(--color-foreground); border-color: var(--color-border-strong); }
+.learn-btn:hover { border-color: var(--burgundy); }
+.learn-btn.sel { background: var(--burgundy); color: var(--paper); border-color: var(--burgundy); font-weight: 600; }
 .learn-note {
   font-family: var(--mono);
   font-size: 12.5px;
   color: var(--color-muted-foreground);
   min-height: 1.4em;
 }
-.learn-note.learn-active { color: var(--lichen); }
+.learn-note.learn-active { color: var(--burgundy); }
 
 /* ---------- Journal-Statistik ---------- */
 .journal-stats {
@@ -546,8 +570,8 @@ canvas {
 }
 .stat-bar-fill {
   width: 100%;
-  background: var(--moth);
-  border-radius: 2px 2px 0 0;
+  background: var(--burgundy);
+  border-radius: 1px 1px 0 0;
   min-height: 2px;
   transition: height .3s ease-out;
 }
@@ -584,26 +608,26 @@ canvas {
   border-bottom: 1px dashed var(--color-border-strong);
   color: var(--color-on-card-body);
 }
-.journal-table tbody tr:hover { background: rgba(122, 141, 96, .08); }
+.journal-table tbody tr:hover { background: rgba(199, 154, 59, .09); }
 .j-hz { font-family: var(--mono); }
 .j-time { font-family: var(--mono); font-size: 12px; color: var(--color-on-card-muted); white-space: nowrap; }
 
 /* ---------- Sperr-Banner ---------- */
 .lockbanner {
   position: fixed; inset: 0; z-index: 100;
-  background: rgba(9, 14, 11, .85);
+  background: rgba(30, 51, 40, .88);
   backdrop-filter: blur(4px);
   display: flex; align-items: center; justify-content: center;
 }
 .lockbox {
   background: var(--color-card);
   border: 2px solid var(--color-destructive);
-  border-radius: 16px;
+  border-radius: 4px;
   padding: 30px 34px;
   text-align: center;
   max-width: 370px;
   color: var(--color-on-card);
-  box-shadow: 0 0 60px rgba(179, 64, 46, .35);
+  box-shadow: 0 0 60px rgba(122, 46, 46, .4);
 }
 .lock-emoji { font-size: 42px; }
 .lockbox h2 { font-family: var(--disp); font-weight: 600; margin: 8px 0 6px; }
@@ -616,7 +640,7 @@ canvas {
 }
 .unlock:hover { filter: brightness(1.08); }
 
-footer { text-align: center; padding: 12px 18px 0; color: #7E8B79; font-size: 11.5px; }
+footer { text-align: center; padding: 12px 18px 0; color: var(--ink-soft); font-size: 11.5px; font-style: italic; }
 
 /* ---------- Install-Chip ---------- */
 .install-chip {

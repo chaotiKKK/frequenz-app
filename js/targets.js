@@ -483,13 +483,14 @@ const TARGETS = [
   }
 ];
 
-/* Hörbereiche für das Diagramm (von, bis, Label, Farbe) */
+/* Hörbereiche für das Diagramm (von, bis, Label, Farbe) — Tafelwerk-Palette:
+   kräftige Tinten auf Papier statt nah-transparenter Nacht-Farben */
 const HEARING_RANGES = [
-  { from: 90,   to: 280,   label: "Fruchtfliege (Balz-Gesang)", color: "#C77B4F" },
-  { from: 300,  to: 800,   label: "Insekt (Mücke)",             color: "#E08794" },
-  { from: 200,  to: 8500,  label: "Vogel (Sittich)",            color: "#9A8FC9" },
-  { from: 20,   to: 20000, label: "Mensch",                     color: "#9FB88A" },
-  { from: 48,   to: 80000, label: "Katze (Heffner 1985)",       color: "#B98FC0" },
-  { from: 40,   to: 45000, label: "Hund",                       color: "#E0A458" },
-  { from: 200,  to: 80000, label: "Ratte (USV 50 kHz)",         color: "#8FA5B8" }
+  { from: 90,   to: 280,   label: "Fruchtfliege (Balz-Gesang)", color: "#B0653A" },
+  { from: 300,  to: 800,   label: "Insekt (Mücke)",             color: "#C46A78" },
+  { from: 200,  to: 8500,  label: "Vogel (Sittich)",            color: "#7B6FA8" },
+  { from: 20,   to: 20000, label: "Mensch",                     color: "#6E8757" },
+  { from: 48,   to: 80000, label: "Katze (Heffner 1985)",       color: "#9A7BB0" },
+  { from: 40,   to: 45000, label: "Hund",                       color: "#C79A3B" },
+  { from: 200,  to: 80000, label: "Ratte (USV 50 kHz)",         color: "#5E7E96" }
 ];

@@ -51,12 +51,12 @@ function encodePNG(w, h, rgb) {
 }
 
 /* ---------- Zeichnung ---------- */
-const NIGHT = [16, 26, 21];      // #101A15
-const LICHEN = [159, 184, 138];  // #9FB88A
-const AMBER = [224, 164, 88];    // #E0A458
-const DUSK = [154, 143, 201];    // #9A8FC9
-const MOTH = [224, 135, 148];    // #E08794
-const PAPER = [229, 227, 212];   // #E5E3D4
+const NIGHT = [242, 237, 223];   // #F2EDDF — Tafelwerk-Papier
+const LICHEN = [110, 135, 87];   // #6E8757 — Tintengrün-Achse
+const AMBER = [199, 154, 59];    // #C79A3B — Ochre-Welle
+const DUSK = [122, 46, 46];      // #7A2E2E — Burgundy
+const MOTH = [74, 93, 80];       // #4A5D50 — Ink-Soft
+const PAPER = [242, 237, 223];   // #F2EDDF
 
 function drawIcon(size, maskable) {
   const buf = Buffer.alloc(size * size * 3);
