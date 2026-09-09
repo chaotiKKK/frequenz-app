@@ -1,0 +1,54 @@
+{
+  "packageId": "io.github.chaotikkk.twa",
+  "host": "chaotikkk.github.io",
+  "name": "Frequenz-App",
+  "launcherName": "Frequenz-App",
+  "display": "standalone",
+  "themeColor": "#F2EDDF",
+  "themeColorDark": "#000000",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#F2EDDF",
+  "enableNotifications": true,
+  "startUrl": "/frequenz-app/",
+  "iconUrl": "https://chaotikkk.github.io/frequenz-app/icons/icon-512.png",
+  "maskableIconUrl": "https://chaotikkk.github.io/frequenz-app/icons/icon-512-maskable.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "C:\\freebuff\\tonz\\android.keystore",
+    "alias": "upload"
+  },
+  "appVersionName": "2",
+  "appVersionCode": 2,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://chaotikkk.github.io/frequenz-app/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {
+    "playBilling": {
+      "enabled": true
+    },
+    "locationDelegation": {
+      "enabled": true
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://chaotikkk.github.io/frequenz-app/",
+  "minSdkVersion": 23,
+  "orientation": "portrait-primary",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "protocolHandlers": [],
+  "fileHandlers": [],
+  "launchHandlerClientMode": "",
+  "displayOverride": [],
+  "appVersion": "2"
+}

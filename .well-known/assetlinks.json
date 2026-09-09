@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "io.github.chaotikkk.twa",
+    "sha256_cert_fingerprints": [
+      "72:8B:46:C0:1B:F5:41:26:DA:19:64:A6:B7:9F:A4:0E:D8:CB:74:CA:85:E1:D9:A6:16:E1:80:42:22:32:06:22"
+    ]
+  }
+}]

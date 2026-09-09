@@ -4,3 +4,12 @@ nohup.out
 
 # Tooling-Metadaten
 .freebuff/
+
+# Android-TWA-Build + Signierung
+android.keystore
+app/build/
+gradle/
+.gradle/
+local.properties
+store_icon.png
+manifest-checksum.txt

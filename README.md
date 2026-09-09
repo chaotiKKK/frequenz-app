@@ -90,6 +90,32 @@ Hinweise:
 - Die Icons werden aus dem Design-System generiert:
   `node scripts/make-icons.js` (192/512 + maskable, reines Node ohne Abhängigkeiten).
 
+## 🤖 Echtes APK (TWA via Bubblewrap)
+
+Neben der PWA gibt es ein signiertes Android-APK (Trusted Web Activity): Die App
+ist eine dünne Android-Hülle um die live GitHub-Pages-Website — Updates
+erscheinen über die Website, ohne APK-Neuinstallation.
+
+**Vorhanden:**
+- `app-release-signed.apk` — direkt auf dem Handy installierbar
+  („unbekannte Quellen“/Datei-Manager → installieren)
+- `android.keystore` — Signaturschlüssel (Passwort siehe Passwort-Manager;
+  **niemals committen!**)
+- `.well-known/assetlinks.json` — Digital Asset Links (verifiziert App ↔ Website,
+  blendet die URL-Leiste aus; muss nach dem Push unter
+  `https://chaotikkk.github.io/.well-known/assetlinks.json` erreichbar sein —
+  bei GitHub-*Project*-Pages liegt die Domain-Root, daher ggf. unter der
+  Nutzungsdomain ablegen)
+
+**Neubau nach Änderungen** (nur nötig für Play-Store-Distribution; normale
+Updates laufen über die Website):
+```bash
+node scripts/bw-build.cjs      # Passwort-Prompts automatisch beantworten
+# oder manuell: bubblewrap build && gradlew.bat assembleRelease
+```
+
+Paket: `io.github.chaotikkk.twa` · minSdk 23 · Version-Code 1
+
 ## 🚀 Deployment (GitHub Pages)
 
 Die App ist unter <https://chaotikkk.github.io/frequenz-app/> live — automatisch
