@@ -289,6 +289,77 @@ const TARGETS = [
     }
   },
   {
+    id: "hornisse",
+    icon: "🐞",
+    name: "Hornisse",
+    sub: "Flugton & Ultraschall",
+    repel: {
+      label: "Abwehren",
+      freqs: [20000, 23000, 26000, 28000],
+      pattern: "sweep",
+      desc: "Ultraschall-Sweep 20–28 kHz — Experiment, Datenlage wie bei Wespen schwach"
+    },
+    enrich: {
+      label: "Anlocken (Experiment)",
+      freqs: [100, 130, 165],
+      pattern: "constant",
+      desc: "Hornissen-Flugton 100–165 Hz — größerer Körper, tiefere Schlagfrequenz als Wespen"
+    },
+    info: {
+      hear: "Hornissen hören wie andere Faltenwespen über das Johnsontsche Organ, grob 100 Hz – 100 kHz. Spezifische Studien sind rar.",
+      facts: [
+        "Hornissen sind größer als Wespen — der Flugton liegt entsprechend tiefer (~100–165 Hz).",
+        "Hornissen greifen Menschen nicht ungefragt an und stehen in Deutschland unter Schutz.",
+        "Echter Schutz: Abstand zum Nest, keine hektischen Bewegungen, Fachbetrieb bei Nest am Haus."
+      ],
+      disc: "Datenlage schwächer als bei Mücken — Modus als sauberes Experiment. Töten ist bei Hornissen rechtlich problematisch; Nester vom Imker/Umweltamt umsetzen lassen."
+    }
+  },
+  {
+    id: "schaben",
+    icon: "🪳",
+    name: "Schaben",
+    sub: "Ultraschall-Experiment",
+    repel: {
+      label: "Abwehren (wirkungslos belegt)",
+      freqs: [25000, 30000, 35000, 45000],
+      pattern: "sweep",
+      desc: "Ultraschall-Sweep 25–45 kHz — Studien: keine Wirkung, nur zum Selbsttesten"
+    },
+    enrich: null,
+    info: {
+      hear: "Schaben hören über Cerci (Anhangsorgane am Hinterleib) vor allem tieffrequent und Luftbewegung; Ultraschall-Wahrnehmung ist begrenzt.",
+      facts: [
+        "Wissenschaftliche Tests (u. a. Gold et al. 1984; Cornell IPM) fanden KEINE Wirkung von Ultraschall auf Deutsche Schaben.",
+        "Kommerzielle Ultraschall-Geräte gegen Schaben sind verkaufsstark, aber wirkungslos.",
+        "Echte Bekämpfung: Hygiene, Zugangssperren, Köderdosen — nicht Ton."
+      ],
+      disc: "Ehrlichkeits-Hinweis: Ultraschall ist gegen Schaben wirkungslos belegt (Gold et al. 1984, Cornell IPM) — dieser Modus ist ein Experiment, keine Bekämpfung. Bei Befall: Fachbetrieb."
+    }
+  },
+  {
+    id: "wanzen",
+    icon: "🛏️",
+    name: "Wanzen",
+    sub: "Ultraschall-Experiment",
+    repel: {
+      label: "Abwehren (wirkungslos belegt)",
+      freqs: [30000, 35000, 40000],
+      pattern: "sweep",
+      desc: "Ultraschall-Sweep 30–40 kHz — Yturralde & Wang 2012: keine Wirkung auf Bettwanzen"
+    },
+    enrich: null,
+    info: {
+      hear: "Bettwanzen nehmen Vibrationen und eventuell Luftschall wahr; kommerzielle Ultraschall-Geräte zeigten in Wahlversuchen keinerlei Reaktion.",
+      facts: [
+        "Yturralde & Wang 2012: Handelsübliche Ultraschall-Geräte stossten Bettwanzen weder an noch stießen sie sie ab.",
+        "Wirksam ist Hitze: >55 °C tötet Wanzen in allen Stadien — professonelle Wärmebehandlung.",
+        "Auch Kälte, Encasing und gründliches Absaugen sind belegte Maßnahmen."
+      ],
+      disc: "Ehrlichkeits-Hinweis: Ton ist kein Wanzen-Mittel — Ultraschall ist gegen Bettwanzen wirkungslos belegt (Yturralde & Wang 2012). Bei Befall umgehend Wärmebehandlung/Fachbetrieb."
+    }
+  },
+  {
     id: "glas",
     icon: "🍷",
     name: "Glas & Porzellan",

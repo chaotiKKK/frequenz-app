@@ -7,12 +7,13 @@ const { TARGETS, HEARING_RANGES } = loadAppScript("js/targets.js", {}, "{ TARGET
 
 const F_MIN = 20, F_MAX = 52000;   // 52 kHz: Ratten-USV bis 52 kHz (aliasing-Hinweis in der DB)
 
-test("App bietet 14 Ziele: 11 Lebewesen + 3 Materialien", () => {
-  assert.equal(TARGETS.length, 14, `erwartet 14 Ziele, gefunden ${TARGETS.length}`);
+test("App bietet 17 Ziele: 14 Lebewesen + 3 Materialien", () => {
+  assert.equal(TARGETS.length, 17, `erwartet 17 Ziele, gefunden ${TARGETS.length}`);
   const ids = TARGETS.map(t => t.id);
   for (const expected of ["tauben", "sittiche", "hunde", "muecken", "fliegen", "pflanzen",
                           "katze", "ratte", "wespen", "kueken", "tomate",
-                          "glas", "metall", "holz"]) {
+                          "glas", "metall", "holz",
+                          "hornisse", "schaben", "wanzen"]) {
     assert.ok(ids.includes(expected), `Ziel ${expected} fehlt`);
   }
 });
@@ -77,6 +78,21 @@ test("Stechmücken haben einen Anlock-Modus (Bereichern), Fliegen nicht", () => 
   const katze = TARGETS.find(t => t.id === "katze");
   assert.ok(katze.repel.freqs.some(f => f >= 20000 && f <= 25000),
             "katze: kein Ultraschall-Pfeifband im Abwehren");
+
+  // Schaben/Wanzen wie Fliegen: belegt wirkungslos, also kein Anlock-Modus
+  for (const id of ["schaben", "wanzen"]) {
+    const t = TARGETS.find(x => x.id === id);
+    assert.ok(t, `Ziel ${id} fehlt`);
+    assert.equal(t.enrich, null, `${id}: enrich sollte null sein`);
+    assert.ok(t.repel, `${id}: repel-Experiment fehlt`);
+    assert.ok(/wirkungslos|kaum belegt/i.test(t.info.disc + " " + (t.repel.desc || "")),
+              `${id}: Ehrlichkeits-Hinweis fehlt`);
+  }
+
+  const hornisse = TARGETS.find(t => t.id === "hornisse");
+  assert.ok(hornisse.repel && hornisse.enrich, "hornisse: beide Modi erwartet");
+  assert.ok(hornisse.enrich.freqs.every(f => f < 250),
+            "hornisse: Anlock-Band sollte tiefer als Wespen sein (größerer Körper)");
 });
 
 test("jedes Ziel mit beiden Modi hat für jeden Modus einen desc-Text", () => {

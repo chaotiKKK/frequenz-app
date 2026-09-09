@@ -16,7 +16,8 @@ Ultraschall-Lautsprecher; die App zeigt den Bereich trotzdem korrekt an.
 ## Bedienung
 
 1. **Ziel-Kachel wählen** — 14 Ziele:
-   - **Lebewesen**: Tauben, Sittiche, Hunde, 🐱 Katze, 🐀 Ratte, 🐝 Wespen, Stechmücken, Fliegen, 🐤 Küken, Pflanzen, 🌾 Tomate
+   - **Lebewesen**: Tauben, Sittiche, Hunde, 🐱 Katze, 🐀 Ratte, 🐝 Wespen, 🐞 Hornisse, Stechmücken, Fliegen, 🪳 Schaben, 🛏️ Wanzen, 🐤 Küken, Pflanzen, 🌾 Tomate
+     (Schaben/Wanzen: Ultraschall laut Studien wirkungslos — nur als ehrliches Experiment)
    - **Materialien** (Resonanz-Experimente, kein Repel): 🍷 Glas & Porzellan, 🔔 Metall & Werkzeug, 🪵 Holz & Diffusor
 2. **Modus**: 🛡 Abwehren oder 💚 Bereichern (bei Mücken: „Anlocken (Falle)") — Kacheln ohne Abwehr starten im Bereichern
 3. **Frequenz**: Preset-Chips antippen oder Slider frei bewegen (20 Hz – 52 kHz, log)
