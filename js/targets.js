@@ -161,6 +161,202 @@ const TARGETS = [
       ],
       disc: "Effekte sind klein und umstritten. Nie tagelang beschallen — der Stress-Modus ist wirklich nur zum Experimentieren gedacht."
     }
+  },
+  {
+    id: "katze",
+    icon: "🐱",
+    name: "Katze",
+    sub: "Pfeifen & Schnurren",
+    repel: {
+      label: "Abwehren",
+      freqs: [20000, 22000, 24000, 25000],
+      pattern: "sweep",
+      desc: "Ultraschall-Pfeifen 20–25 kHz — wie die Hundepfeife, Katzen hören bis 85 kHz"
+    },
+    enrich: {
+      label: "Bereichern",
+      freqs: [100, 125, 150, 200],
+      pattern: "chord",
+      desc: "Schnurre-Bereich ~25 Hz, als hörbare Oktav-Replik 100–200 Hz"
+    },
+    info: {
+      hear: "Katzen hören 48 Hz – 85 kHz (Heffner 1985) — eines der breitesten Hörfenster der Säugetiere. Am empfindlichsten um 8 kHz.",
+      facts: [
+        "Katzen hören rund 1,6 Oktaven höher als Menschen (bis 64–85 kHz je nach Studie).",
+        "Das Schnurren liegt bei ~25–30 Hz Grundfrequenz — die 100–200-Hz-Töne replizieren es hörbar.",
+        "Ultraschall-Abwehr ist bei Katzen kaum belegt; Pfeifen wirkt eher als Neustimulus als als Vertreiber."
+      ],
+      disc: "Pfeiftöne können Katzen stressen statt vertreiben — nie dauerhaft oder laut einsetzen, und nie, wenn die eigene Katze in Hörweite ist."
+    }
+  },
+  {
+    id: "ratte",
+    icon: "🐀",
+    name: "Ratte",
+    sub: "Ultraschall-Kommunikation",
+    repel: {
+      label: "Abwehren (schwach belegt)",
+      freqs: [30000, 35000, 40000, 45000],
+      pattern: "sweep",
+      desc: "30–45 kHz Sweep — Ratten hören bis ~80 kHz, Vertreibung per Ton ist kaum belegt"
+    },
+    enrich: {
+      label: "Bereichern (50-kHz-Lachen)",
+      freqs: [50000, 51000, 52000],
+      pattern: "chirp",
+      desc: "50-kHz-USV: Rattenglück-Rufe, die Annäherung und positive Affektlage hervorrufen"
+    },
+    info: {
+      hear: "Ratten hören ~200 Hz – 80 kHz. Sie kommunizieren ultraschall: 22 kHz = Angst/Abwehr, 50 kHz = positives Affektgefühl („Lachen“).",
+      facts: [
+        "50-kHz-Rufe lösen bei Ratten Annäherungsverhalten aus (Wöhr 2007, PLoS ONE) — Bibliothek des Wohlfühlsignals.",
+        "Achtung Hardware: 50 kHz brauchen einen Ultraschall-Lautsprecher — normale Boxen erzeugen hier nichts (oder aliasen hörbar).",
+        "22-kHz-Rufe signalisieren Bedrohung — die App nutzt sie bewusst NICHT, um Stress zu vermeiden.",
+        "„Rattenschreck“-Ultraschallgeräte zeigen in Feldtests kaum dauerhafte Wirkung."
+      ],
+      disc: "Ethischer Hinweis: Der 50-kHz-Modus ist für Tierhaltung/Forschung gedacht — Ratten sind empfindungsfähige Tiere, keine Schädlings-Abstraktion."
+    }
+  },
+  {
+    id: "wespen",
+    icon: "🐝",
+    name: "Wespen",
+    sub: "Flugton & Ultraschall",
+    repel: {
+      label: "Abwehren",
+      freqs: [22000, 25000, 28000],
+      pattern: "sweep",
+      desc: "Ultraschall-Sweep 22–28 kHz — Wirkung auf Wespen schwach belegt"
+    },
+    enrich: {
+      label: "Anlocken (Experiment)",
+      freqs: [150, 200, 250],
+      pattern: "constant",
+      desc: "Wespen-Flugton 150–250 Hz als Anlock-Experiment (z. B. für Fallen)"
+    },
+    info: {
+      hear: "Wespen hören Luftschall grob 100 Hz – 100 kHz über das Johnsontsche Organ am Fühler — ähnlich wie Mücken, aber schlechter erforscht.",
+      facts: [
+        "Wespen-Flugton liegt bei 150–250 Hz — tiefer als der der Mücke.",
+        "Ultraschall-Wespenabwehr ist kommerziell erhältlich, aber wissenschaftlich kaum validiert.",
+        "Echter Wesenschutz: Lebensmittel abdecken, Fallesicherungen, Duftstoffe wie Essig niemals nahe am Tisch."
+      ],
+      disc: "Datenlage deutlich schwächer als bei Mücken — Mode hier als sauberes Experiment, nicht als Lösung."
+    }
+  },
+  {
+    id: "kueken",
+    icon: "🐤",
+    name: "Küken",
+    sub: "Brutstation",
+    repel: null,
+    enrich: {
+      label: "Bereichern",
+      freqs: [2800, 3200, 3600, 4000],
+      pattern: "chirp",
+      desc: "Gluck-Rufe im Mutterstimmen-Bereich 2,8–4 kHz — Prägungssignal für die Brut"
+    },
+    info: {
+      hear: "Hühner hören grob 125 Hz – 2 kHz (empfindlich); Küken prägen sich auf Rufe der Mutterhenne (~2,8–4 kHz) in den ersten Lebenstagen.",
+      facts: [
+        "Gluck-Rufe der Henne beruhigen Küken und steuern Futterverhalten.",
+        "Küken schlüpfen synchron, weil sie sich über die Schale hinweg akustisch abstimmen.",
+        "Der Modus ist für Brutstationen/Thermostuben gedacht — leise und zeitlich begrenzt."
+      ],
+      disc: "Nicht als Dauerton! Küken prägen sich auf das Signal — dauerhafte Beschallung kann die Prägung stören statt stützen."
+    }
+  },
+  {
+    id: "tomate",
+    icon: "🌾",
+    name: "Tomate",
+    sub: "Wuchs-Beschallung",
+    repel: null,
+    enrich: {
+      label: "Bereichern",
+      freqs: [110, 250, 350, 432],
+      pattern: "chord",
+      desc: "110–500-Hz-Wurzelstimulation, eigener Preset-Satz mit 432-Hz-Abschluss"
+    },
+    info: {
+      hear: "Tomaten haben kein Gehör — aber Wurzeln reagieren in Studien auf Vibrationen im 100–500-Hz-Band (z. B. Mais-Experimente übertragen).",
+      facts: [
+        "Studien zeigen leichte Wuchs-Förderung bei 100–500 Hz — Effekte klein, aber messbar.",
+        "432 Hz als Abschlussklang: Popularitätsweg, Wirkung nicht belegt, schadet nicht.",
+        "Nie über Stunden beschallen — Dauer-Schall wirkt als Stressor."
+      ],
+      disc: "Übertragene Ergebnisse (Mais, Arabidopsis) — für Tomaten selbst ist die Datenlage dünner. Experiment, kein Dünger-Ersatz."
+    }
+  },
+  {
+    id: "glas",
+    icon: "🍷",
+    name: "Glas & Porzellan",
+    sub: "Resonanz-Testtöne",
+    material: true,
+    repel: null,
+    enrich: {
+      label: "Resonanz suchen",
+      freqs: [400, 600, 800, 1200],
+      pattern: "constant",
+      desc: "400–1200 Hz: typischer Eigenresonanz-Bereich von Gläsern und Porzellan — Objekt zum Mitschwingen bringen"
+    },
+    info: {
+      hear: "Glas klingt, weil es schwingt: Eigenresonanzen typischer Trinkgläser liegen bei ~400–1200 Hz (abhängig von Form, Größe, Füllstand).",
+      facts: [
+        "Füllstand verändert die Resonanzfrequenz — volleres Glas = tieferer Klang (Wein-glas-Test).",
+        "Chladni-Muster machen Schwingungen sichtbar: Ton + Sand = Geometrie.",
+        "Nah an der Eigenresonanz + hohe Lautstärke kann dünnes Glas tatsächlich anregen — mit Bedacht experimentieren."
+      ],
+      disc: "Resonanz-Experimente bei moderater Lautstärke — sehr laute Töne nahe der Eigenresonanz können Glas beschädigen. Kein Lebewesen, kein Repel."
+    }
+  },
+  {
+    id: "metall",
+    icon: "🔔",
+    name: "Metall & Werkzeug",
+    sub: "Stehende Wellen",
+    material: true,
+    repel: null,
+    enrich: {
+      label: "Resonanz suchen",
+      freqs: [150, 250, 400, 600],
+      pattern: "sweep",
+      desc: "150–600 Hz Sweep: Eigenschwingungen von Metallteilen, Stäben und Blechen orten"
+    },
+    info: {
+      hear: "Metall klingt hoch und klar: Glocken, Stäbe und Bleche haben Eigenfrequenzen, die Form, Länge und Spannung bestimmen.",
+      facts: [
+        "Länge bestimmt die Grundfrequenz: doppelt so langer Stab = halbe Frequenz.",
+        "Stehende Wellen machen Knoten und Bäuche sichtbar — das Prinzip hinter Chladni-Figuren.",
+        "Werkzeug-Prüfung: Verschiedene Materialdicken klingen unterschiedlich — Klang als Schadstoff-Indikator."
+      ],
+      disc: "Zum Auffinden von Eigenschwingungen gedacht — kein Reinigungs- oder Alarmsystem. Kein Lebewesen, kein Repel."
+    }
+  },
+  {
+    id: "holz",
+    icon: "🪵",
+    name: "Holz & Diffusor",
+    sub: "Raumresonanzen",
+    material: true,
+    repel: null,
+    enrich: {
+      label: "Resonanz suchen",
+      freqs: [200, 300, 400, 500],
+      pattern: "constant",
+      desc: "200–500 Hz: Testtöne für Resonanzen von Holzwänden, Paneelen und Diffusoren"
+    },
+    info: {
+      hear: "Holz ist ein natürlicher Klangkörper: Resonanzböden von Instrumenten bestehen daraus — Wände und Panele haben spürbare Eigenresonanzen.",
+      facts: [
+        "Raummoden: Freistehende Holzwände resonieren oft bei 100–300 Hz — der Bäuche-Bereich im Wohnzimmer.",
+        "Dielen und Panele knarren resonanzbedingt — der Ton macht es hörbar, wo es liegt.",
+        "Diffusoren brechen Schall — ihr Material (Holz) färbt den Klang.",
+        "Ton oder Holz-Schlagprobe: vergleichbare Diagnose, nur mit dauerhaftem Ton."
+      ],
+      disc: "Zum Aufspüren von Raum-Resonanzen gedacht — kein Baugutachter. Kein Lebewesen, kein Repel."
+    }
   }
 ];
 

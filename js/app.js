@@ -197,7 +197,7 @@ function selectTarget(id) {
     renderJournal();
   }
   curTarget = t;
-  curMode = "repel";
+  curMode = t.repel ? "repel" : "enrich";   // Materialien/Wohl-Kacheln starten im Enrich
   freqOverride = null;
   renderTarget();
 }
@@ -217,14 +217,16 @@ function renderTarget() {
   // Fallen-Sektion nur bei Mücken zeigen
   $("trapSection").classList.toggle("hidden", !t || t.id !== "muecken");
 
-  // Ziel ohne Enrich-Modus (Fliegen) -> repel erzwingen
+  // Ziel ohne Enrich-Modus (Fliegen) -> repel erzwingen;
+  // Ziel ohne Repel (Materialien, Küken, Tomate) -> enrich erzwingen
   if (t && !t.enrich && curMode === "enrich") curMode = "repel";
+  if (t && !t.repel && curMode === "repel") curMode = "enrich";
 
   $("panelTitle").textContent = t ? `${t.icon} ${t.name}` : "Ziel wählen";
 
   // Modus-Buttons
   document.querySelectorAll("#modeBtns button").forEach(b => {
-    const has = t && (b.dataset.mode === "repel" || t.enrich);
+    const has = t && (b.dataset.mode === "repel" ? t.repel : t.enrich);
     b.disabled = !t || !has;
     b.classList.toggle("sel", !!t && b.dataset.mode === curMode);
   });

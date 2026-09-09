@@ -62,7 +62,7 @@ def main():
         # ---------- 1) Laden sauber, keine Konsolen-Fehler ----------
         page, errors = fresh_page(browser)
         check("Laden: Titel sichtbar", page.locator("h1").inner_text().strip() == "Frequenz-App")
-        check("Laden: 6 Ziel-Kacheln", page.locator(".tile").count() == 6, str(page.locator(".tile").count()))
+        check("Laden: 14 Ziel-Kacheln", page.locator(".tile").count() == 14, str(page.locator(".tile").count()))
         check("Laden: keine Konsolen-Fehler", len(errors) == 0, "; ".join(errors[:3]))
 
         # ---------- 2) Kachel wählen ----------

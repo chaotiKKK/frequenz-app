@@ -5,7 +5,36 @@ const { loadAppScript } = require("./helpers/load.js");
 
 const { TARGETS, HEARING_RANGES } = loadAppScript("js/targets.js", {}, "{ TARGETS, HEARING_RANGES }");
 
-const F_MIN = 20, F_MAX = 48000;
+const F_MIN = 20, F_MAX = 52000;   // 52 kHz: Ratten-USV bis 52 kHz (aliasing-Hinweis in der DB)
+
+test("App bietet 14 Ziele: 11 Lebewesen + 3 Materialien", () => {
+  assert.equal(TARGETS.length, 14, `erwartet 14 Ziele, gefunden ${TARGETS.length}`);
+  const ids = TARGETS.map(t => t.id);
+  for (const expected of ["tauben", "sittiche", "hunde", "muecken", "fliegen", "pflanzen",
+                          "katze", "ratte", "wespen", "kueken", "tomate",
+                          "glas", "metall", "holz"]) {
+    assert.ok(ids.includes(expected), `Ziel ${expected} fehlt`);
+  }
+});
+
+test("Lebewesen haben mindestens einen Modus; Materialien ausschließlich Enrich", () => {
+  const MATERIALS = new Set(["glas", "metall", "holz"]);
+  const NO_REPEL = new Set(["kueken", "tomate", ...MATERIALS]);
+  for (const t of TARGETS) {
+    if (MATERIALS.has(t.id)) {
+      assert.equal(t.repel, null, `${t.id}: Material darf kein repel haben`);
+      assert.ok(t.enrich, `${t.id}: Material braucht enrich`);
+      assert.ok(t.material, `${t.id}: material-Flag fehlt`);
+    } else {
+      assert.ok(!t.material, `${t.id}: Lebewesen ohne material-Flag`);
+      if (NO_REPEL.has(t.id)) {
+        assert.equal(t.repel, null, `${t.id}: sollte kein repel haben`);
+      } else {
+        assert.ok(t.repel, `${t.id}: repel fehlt`);
+      }
+    }
+  }
+});
 
 test("jedes Ziel hat id, icon, name, sub und info", () => {
   for (const t of TARGETS) {
@@ -39,6 +68,15 @@ test("Stechmücken haben einen Anlock-Modus (Bereichern), Fliegen nicht", () => 
   const fliegen = TARGETS.find(t => t.id === "fliegen");
   assert.ok(fliegen, "Ziel fliegen fehlt");
   assert.equal(fliegen.enrich, null, "fliegen: enrich sollte null sein");
+
+  const ratte = TARGETS.find(t => t.id === "ratte");
+  assert.ok(ratte.enrich, "ratte: 50-kHz-USV-Modus (Bereichern) fehlt");
+  assert.ok(ratte.enrich.freqs.some(f => f >= 48000 && f <= 52000),
+            "ratte: keine 50-kHz-USV-Frequenz im Bereichern");
+
+  const katze = TARGETS.find(t => t.id === "katze");
+  assert.ok(katze.repel.freqs.some(f => f >= 20000 && f <= 25000),
+            "katze: kein Ultraschall-Pfeifband im Abwehren");
 });
 
 test("jedes Ziel mit beiden Modi hat für jeden Modus einen desc-Text", () => {
@@ -68,4 +106,8 @@ test("Mensch-Hörbereich deckt hörbare Presets ab, Mücken-Band enthält den Lo
   assert.ok(insekt, "Insekt-Band fehlt");
   // Weibchen-Flugton 400–600 Hz muss im Mücken-Band liegen (Anlock-Modus)
   assert.ok(insekt.from <= 400 && insekt.to >= 600, "Mücken-Band enthält den Lockton nicht");
+});
+
+test("Hörbereiche bleiben auf die 4 Tier-Bänder beschränkt (Materialien hören nicht)", () => {
+  assert.equal(HEARING_RANGES.length, 4, "Materialien dürfen keine Hörbereich-Zeile bekommen");
 });
