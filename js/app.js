@@ -125,6 +125,7 @@ function startLearnDemo(key) {
 
 let curTarget = null;
 let curMode = "repel";          // repel | enrich
+let curVariant = null;          // Varianten-Ziele (mensch): "jung" | "alt"
 let timerMin = 0;
 let timerHandle = null;
 let freqOverride = null;        // wenn Preset/Slider bewegt wurde
@@ -184,6 +185,24 @@ function buildTiles() {
 
 /* ---------- Ziel & Modus ---------- */
 
+/* Varianten-Ziele (z. B. Mensch jung/alt): effektive Modi-Objekte lesen.
+   Ohne variants verhält sich dies exakt wie t[curMode]. */
+function modesOf(t) {
+  if (!t) return { repel: null, enrich: null };
+  if (!t.variants) return { repel: t.repel, enrich: t.enrich };
+  const v = t.variants.find(x => x.id === curVariant) || t.variants[0];
+  return { repel: v.repel, enrich: v.enrich };
+}
+
+function setVariant(vid) {
+  if (!curTarget || !curTarget.variants) return;
+  curVariant = vid;
+  freqOverride = null;
+  const modes = modesOf(curTarget);
+  curMode = modes.repel ? "repel" : "enrich";
+  renderTarget();
+}
+
 function selectTarget(id) {
   if (AudioEngine.isLocked()) return;
   const t = TARGETS.find(x => x.id === id);
@@ -197,7 +216,9 @@ function selectTarget(id) {
     renderJournal();
   }
   curTarget = t;
-  curMode = t.repel ? "repel" : "enrich";   // Materialien/Wohl-Kacheln starten im Enrich
+  const modes = modesOf(t);
+  curMode = modes.repel ? "repel" : "enrich";   // Materialien/Wohl-Kacheln starten im Enrich
+  curVariant = t.variants ? t.variants[0].id : null;
   freqOverride = null;
   renderTarget();
 }
@@ -217,23 +238,47 @@ function renderTarget() {
   // Fallen-Sektion nur bei Mücken zeigen
   $("trapSection").classList.toggle("hidden", !t || t.id !== "muecken");
 
+  const modes = modesOf(t);
+
   // Ziel ohne Enrich-Modus (Fliegen) -> repel erzwingen;
   // Ziel ohne Repel (Materialien, Küken, Tomate) -> enrich erzwingen
-  if (t && !t.enrich && curMode === "enrich") curMode = "repel";
-  if (t && !t.repel && curMode === "repel") curMode = "enrich";
+  if (t && !modes.enrich && curMode === "enrich") curMode = "repel";
+  if (t && !modes.repel && curMode === "repel") curMode = "enrich";
 
   $("panelTitle").textContent = t ? `${t.icon} ${t.name}` : "Ziel wählen";
 
+  // Varianten-Chips (Mensch: Junger/Älterer)
+  const varBar = $("variantBar");
+  if (t && t.variants) {
+    varBar.classList.remove("hidden");
+    varBar.innerHTML = "";
+    const cap = document.createElement("span");
+    cap.className = "variant-label";
+    cap.textContent = "Variante:";
+    varBar.appendChild(cap);
+    t.variants.forEach(v => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip variant-chip" + (curVariant === v.id ? " sel" : "");
+      b.textContent = v.label;
+      b.addEventListener("click", () => setVariant(v.id));
+      varBar.appendChild(b);
+    });
+  } else {
+    varBar.classList.add("hidden");
+    varBar.innerHTML = "";
+  }
+
   // Modus-Buttons
   document.querySelectorAll("#modeBtns button").forEach(b => {
-    const has = t && (b.dataset.mode === "repel" ? t.repel : t.enrich);
+    const has = t && (b.dataset.mode === "repel" ? modes.repel : modes.enrich);
     b.disabled = !t || !has;
     b.classList.toggle("sel", !!t && b.dataset.mode === curMode);
   });
 
   const badge = $("modeBadge");
   if (t) {
-    const m = t[curMode];
+    const m = modes[curMode];
     badge.textContent = m.label;
     badge.className = "badge " + (curMode === "repel" ? "rep" : "enr");
   } else {
@@ -243,7 +288,7 @@ function renderTarget() {
     return;
   }
 
-  const m = t[curMode];
+  const m = modes[curMode];
 
   // Presets
   const chips = $("presetChips");

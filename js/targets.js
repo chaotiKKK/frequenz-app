@@ -289,6 +289,58 @@ const TARGETS = [
     }
   },
   {
+    id: "mensch",
+    icon: "🧑",
+    name: "Mensch",
+    sub: "Hörtest nach Alter",
+    /* Varianten: gleiche Kachel, andere Ohren. Der Mosquito-Ton ist
+       derselbe — nur die Hörgrenze des Hörenden unterscheidet sich. */
+    variants: [
+      {
+        id: "jung",
+        label: "Junger Mensch",
+        repel: {
+          label: "Mosquito-Ton",
+          freqs: [16800, 17400, 18000],
+          pattern: "constant",
+          desc: "16,8–18 kHz: für junge Ohren (bis ~25) deutlich hörbar — der berüchtigte Anti-Loitering-Ton"
+        },
+        enrich: {
+          label: "Bereichern",
+          freqs: [220, 330, 440],
+          pattern: "chord",
+          desc: "Weicher A-Dur-Akkord 220–440 Hz — angenehm in jedem Alter"
+        }
+      },
+      {
+        id: "alt",
+        label: "Älterer Mensch",
+        repel: {
+          label: "Mosquito-Ton",
+          freqs: [16800, 17400, 18000],
+          pattern: "constant",
+          desc: "Derselbe Ton — ab ~25–30 zunehmend unhörbar (Presbyakusis). Hörst du nichts? Genau das ist der Punkt."
+        },
+        enrich: {
+          label: "Bereichern",
+          freqs: [250, 500, 1000],
+          pattern: "chord",
+          desc: "Sprachband 250–1000 Hz — auch bei altersschwerhörigem Ohr gut wahrnehmbar"
+        }
+      }
+    ],
+    info: {
+      hear: "Gesunde junge Ohren hören 20 Hz – 20 kHz (Hunter 2020). Ab ~25–30 schwinden die Höhen zuerst: >8 kHz zuerst, im Alter oft nur noch 12–14 kHz.",
+      facts: [
+        "Der Mosquito-Ton (17,4–18,5 kHz) wurde als Gerät gegen Jugendgruppen eingesetzt — Erwachsene hörten ihn schlicht nicht.",
+        "Der Europarat verurteilte die Geräte 2010 als Verstoß gegen die Menschenwürde: Sie vertreiben Jugendliche pauschal.",
+        "Selbsttest: Wähle beide Varianten nacheinander und höre, wo deine persönliche Grenze liegt.",
+        "Hörverlust beginnt schleichend — laute Kopfhörer beschleunigen ihn deutlich."
+      ],
+      disc: "Ehrlichkeits-Hinweis: Den Mosquito-Ton nie dauerhaft oder laut einsetzen — er ist für Menschen, die ihn hören, echt unangenehm. Gegenseitiger Respekt statt Vertreibung."
+    }
+  },
+  {
     id: "hornisse",
     icon: "🐞",
     name: "Hornisse",

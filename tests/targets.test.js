@@ -7,15 +7,38 @@ const { TARGETS, HEARING_RANGES } = loadAppScript("js/targets.js", {}, "{ TARGET
 
 const F_MIN = 20, F_MAX = 52000;   // 52 kHz: Ratten-USV bis 52 kHz (aliasing-Hinweis in der DB)
 
-test("App bietet 17 Ziele: 14 Lebewesen + 3 Materialien", () => {
-  assert.equal(TARGETS.length, 17, `erwartet 17 Ziele, gefunden ${TARGETS.length}`);
+test("App bietet 18 Ziele: 15 Lebewesen + 3 Materialien", () => {
+  assert.equal(TARGETS.length, 18, `erwartet 18 Ziele, gefunden ${TARGETS.length}`);
   const ids = TARGETS.map(t => t.id);
   for (const expected of ["tauben", "sittiche", "hunde", "muecken", "fliegen", "pflanzen",
                           "katze", "ratte", "wespen", "kueken", "tomate",
                           "glas", "metall", "holz",
-                          "hornisse", "schaben", "wanzen"]) {
+                          "hornisse", "schaben", "wanzen", "mensch"]) {
     assert.ok(ids.includes(expected), `Ziel ${expected} fehlt`);
   }
+});
+
+test("mensch: zwei Varianten (jung/alt), beide mit beiden Modi und Mosquito-Band", () => {
+  const m = TARGETS.find(t => t.id === "mensch");
+  assert.ok(m, "Ziel mensch fehlt");
+  assert.ok(Array.isArray(m.variants) && m.variants.length === 2, "mensch: 2 Varianten erwartet");
+  assert.deepEqual([...m.variants.map(v => v.id)], ["jung", "alt"]);
+  for (const v of m.variants) {
+    assert.ok(v.label, "varianten-label fehlt");
+    assert.ok(v.repel && Array.isArray(v.repel.freqs) && v.repel.freqs.length, `${v.id}: repel fehlt`);
+    assert.ok(v.enrich && Array.isArray(v.enrich.freqs) && v.enrich.freqs.length, `${v.id}: enrich fehlt`);
+    assert.ok(v.repel.freqs.some(f => f >= 16500 && f <= 18000),
+              `${v.id}: kein Mosquito-Ton im 16,5–18-kHz-Band`);
+    for (const mode of ["repel", "enrich"]) {
+      assert.ok(v[mode].desc, `${v.id}.${mode}: desc fehlt`);
+      for (const f of v[mode].freqs) {
+        assert.ok(f >= 20 && f <= 52000, `${v.id}.${mode}: ${f} Hz außerhalb des Bereichs`);
+      }
+    }
+  }
+  // Die Kern-Aussage: beide teilen sich dasselbe Band (Hörtest-Charakter)
+  assert.deepEqual([...m.variants[0].repel.freqs], [...m.variants[1].repel.freqs],
+                   "beide Varianten nutzen denselben Mosquito-Ton");
 });
 
 test("Lebewesen haben mindestens einen Modus; Materialien ausschließlich Enrich", () => {
@@ -26,6 +49,10 @@ test("Lebewesen haben mindestens einen Modus; Materialien ausschließlich Enrich
       assert.equal(t.repel, null, `${t.id}: Material darf kein repel haben`);
       assert.ok(t.enrich, `${t.id}: Material braucht enrich`);
       assert.ok(t.material, `${t.id}: material-Flag fehlt`);
+    } else if (t.variants) {
+      // Varianten-Ziele (mensch): Modi leben in den Varianten
+      assert.ok(!t.material, `${t.id}: Lebewesen ohne material-Flag`);
+      assert.ok(t.variants.every(v => v.repel && v.enrich), `${t.id}: jede Variante braucht beide Modi`);
     } else {
       assert.ok(!t.material, `${t.id}: Lebewesen ohne material-Flag`);
       if (NO_REPEL.has(t.id)) {

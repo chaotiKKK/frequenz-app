@@ -237,6 +237,20 @@ main { max-width: 1000px; margin: 0 auto; padding: 0 18px; }
   box-shadow: var(--shadow-card);
 }
 .panel-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.variantbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.variant-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--color-on-card-muted);
+}
+.variant-chip.sel { background: var(--dusk); border-color: var(--dusk); color: var(--color-background); }
 .panel-head h2, .info h2 {
   font-family: var(--disp);
   font-weight: 600;
