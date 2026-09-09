@@ -4,6 +4,7 @@
   "description": "Töne für Tauben, Sittiche, Hunde, Mücken & Pflanzen — mit Not-Aus, Fallen-Modus, Lern-Modus und Sound-Journal.",
   "lang": "de",
   "start_url": "./",
+  "id": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
