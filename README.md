@@ -143,6 +143,9 @@ deshalb in einer vm-Sandbox mit DOM-Stub aus.
 „The Naturalist's Listening Instrument“ — Nachtgrund mit Flechten-Papier-Platten,
 Fraunces/Instrument Sans/Spline Sans Mono, artencodierte Farben (Flechte=Mensch,
 Bernstein=Hund, Dämmerung=Vogel, Motte=Insekt), Messtafeln I–III als Signatur.
+Das Styling folgt einer dreistufigen Token-Hierarchie (**Brand → Semantic →
+Komponente**), Farben als Hex-Fallback plus exakt konvertiertem OKLCH —
+Design-System-Disziplin ohne Build-Step.
 
 ## Dateien
 
