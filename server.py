@@ -10,6 +10,10 @@ class NoCacheHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Cache-Control", "no-store, must-revalidate")
         super().end_headers()
 
-with socketserver.ThreadingTCPServer(("127.0.0.1", PORT), NoCacheHandler) as httpd:
+class ReusableTCPServer(socketserver.ThreadingTCPServer):
+    allow_reuse_address = True   # sofortiges Re-Bind trotz TIME_WAIT (Windows)
+    daemon_threads = True
+
+with ReusableTCPServer(("127.0.0.1", PORT), NoCacheHandler) as httpd:
     print(f"Serving on http://127.0.0.1:{PORT}")
     httpd.serve_forever()

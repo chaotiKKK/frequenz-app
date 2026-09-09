@@ -4,6 +4,7 @@
   "description": "Töne für Tiere, Insekten & Pflanzen — mit Not-Aus und Visualisierung",
   "private": true,
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "e2e": "python C:/Users/HP/.agents/skills/webapp-testing/scripts/with_server.py --server \"python server.py 8593\" --port 8593 -- python tests/e2e/test_app.py"
   }
 }
