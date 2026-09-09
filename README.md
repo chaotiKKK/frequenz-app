@@ -5,7 +5,10 @@ abwehrend **und** bereichernd, mit großem **Not-Aus-Knopf** und Live-Visualisie
 
 ## Starten
 
-Einfach `index.html` im Browser öffnen (Doppelklick) — kein Build, keine Installation.
+**Online:** <https://chaotikkk.github.io/frequenz-app/> — installierbar als PWA
+(siehe unten).
+
+Lokal: einfach `index.html` im Browser öffnen (Doppelklick) — kein Build, keine Installation.
 Für Ultraschall-Töne gilt: Handys/Laptops haben eingebaute Lautsprecher, die oberhalb
 von ~15–18 kHz physikalisch kaum noch etwas erzeugen. Für 20–44 kHz braucht es
 Ultraschall-Lautsprecher; die App zeigt den Bereich trotzdem korrekt an.
@@ -82,6 +85,25 @@ Hinweise:
 - Die Icons werden aus dem Design-System generiert:
   `node scripts/make-icons.js` (192/512 + maskable, reines Node ohne Abhängigkeiten).
 
+## 🚀 Deployment (GitHub Pages)
+
+Die App ist unter <https://chaotikkk.github.io/frequenz-app/> live — automatisch
+bei jedem Push auf `main` neu gebaut.
+
+So wird eine Änderung veröffentlicht:
+
+```
+git add -A && git commit -m "Beschreibung" && git push
+```
+
+Nach ~1 Minute ist der neue Stand online. Der Service Worker aktualisiert
+die App-Shell dann von selbst (stale-while-revalidate; ein App-Neustart
+genügt).
+
+**Auf dem Handy installieren:** Seite in Chrome (Android) bzw. Safari (iOS)
+öffnen → Menü → **„Zum Startbildschirm hinzufügen“** — danach startet die
+App wie eine native App im Vollbild, auch offline.
+
 ## 🎓 Lern-Modus
 
 Unter Tafel III: fünf Buttons starten langsame Klang-Durchwanderungen der
@@ -132,7 +154,7 @@ js/audio-engine.js      Web-Audio-Engine (Oszillatoren, Sweeps, Not-Aus-Sperre)
 js/visualizer.js        Messtafeln I–III (Canvas)
 js/app.js               UI-Logik, Fallen-Modus, Timer, Sicherheit
 js/journal.js           Sound-Journal (Logik, CSV, Persistenz)
-js/audio-engine.js      Web-Audio-Engine (Oszillatoren, Duett, Chime, Not-Aus-Sperre)
+js/sw-config.js         SW-Konfiguration: Precache-Liste, Strategien, Registrierungs-Guard
 server.py               No-Cache-Entwicklungsserver (optional)
 tests/                  node:test-Suite + vm-Harness
 ```
