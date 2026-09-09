@@ -8,8 +8,11 @@ nohup.out
 # Android-TWA-Build + Signierung
 android.keystore
 app/build/
-gradle/
+build/
 .gradle/
 local.properties
 store_icon.png
 manifest-checksum.txt
+*.apk
+*.apk.idsig
+*.keystore
