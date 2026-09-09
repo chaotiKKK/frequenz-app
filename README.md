@@ -107,12 +107,15 @@ genügt).
 
 Zwei Ebenen, beide optional für die Nutzung der App:
 
-- **`npm test`** — Logik-Suite (39 Tests, Node-Bordmittel, keine Abhängigkeiten)
+- **`npm test`** — Logik-Suite (Node-Bordmittel, keine Abhängigkeiten)
 - **`npm run e2e`** — Browser-E2E-Suite (20 Checks in headless Chromium via
   Playwright; braucht einmalig `pip install playwright` +
   `playwright install chromium`). Startet die App selbstständig auf Port 8593
   und prüft Laden, Kacheln, Journal, Not-Aus, Fallen-Modus, Lern-Demo und
   PWA-Dev-Guard.
+- **Cache-Auto-Bump** — Einmalig nach Klonen `git config core.hooksPath .githooks`
+  ausführen; der Pre-Commit-Hook erhöht dann bei jedem Commit die
+  SW-Cache-Version (manuell: `node scripts/bump-sw-version.mjs`).
 
 **Auf dem Handy installieren:** Seite in Chrome (Android) bzw. Safari (iOS)
 öffnen → Menü → **„Zum Startbildschirm hinzufügen“** — danach startet die

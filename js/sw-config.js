@@ -4,7 +4,7 @@
    ============================================================ */
 
 const SW_CACHE = (() => {
-  const VERSION = "v3";
+  const VERSION = "v5";
   const NAME = "frequenz-app-" + VERSION;
 
   const precache = [

@@ -153,6 +153,34 @@ test("Precache-Liste deckt jede lokale Referenz aus index.html ab", () => {
   }
 });
 
+/* ---------- Cache-Version: Format + Auto-Bump-Skript ---------- */
+
+test("Cache-Version hat gültiges Format v<N>", () => {
+  const cfg = loadAppScript("js/sw-config.js", {}, "SW_CACHE");
+  assert.match(cfg.VERSION, /^v\d+$/, "VERSION sollte v<Zahl> sein");
+});
+
+test("Bump-Skript: v3 -> v4, idempotent bei erneutem Lauf (v5), Fehler bei fehlender Zeile", () => {
+  const os = require("node:os");
+  const { execFileSync } = require("node:child_process");
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "swbump-"));
+  const target = path.join(tmp, "sw-config.js");
+  const src = fs.readFileSync(path.join(ROOT, "js", "sw-config.js"), "utf8");
+  // Simuliere v3-Stand, egal was aktuell drinsteht
+  fs.writeFileSync(target, src.replace(/const VERSION = "v\d+";/, 'const VERSION = "v3";'));
+  const script = path.join(ROOT, "scripts", "bump-sw-version.mjs");
+  const run = () => execFileSync(process.execPath, [script, target], { encoding: "utf8" });
+  run();
+  assert.match(fs.readFileSync(target, "utf8"), /const VERSION = "v4";/, "erster Bump: v3 -> v4");
+  run();
+  assert.match(fs.readFileSync(target, "utf8"), /const VERSION = "v5";/, "zweiter Bump: v4 -> v5");
+  // Fehlerfall: Datei ohne VERSION lässt das Skript mit Code != 0 scheitern
+  const bad = path.join(tmp, "bad.js");
+  fs.writeFileSync(bad, "const X = 1;");
+  assert.throws(() => execFileSync(process.execPath, [script, bad], { stdio: "pipe" }));
+  fs.rmSync(tmp, { recursive: true, force: true });
+});
+
 test("SW-Strategien: Fonts network-first, Shell stale-while-revalidate, Rest bypass", () => {
   const cfg = loadAppScript("js/sw-config.js", {}, "SW_CACHE");
   assert.equal(cfg.strategyFor("https://fonts.gstatic.com/s/fraunces/x.woff2"), "font");

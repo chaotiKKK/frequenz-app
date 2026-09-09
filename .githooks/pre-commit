@@ -1,0 +1,5 @@
+#!/bin/sh
+# Bumpt die SW-Cache-Version bei jedem Commit (v<N> -> v<N+1>),
+# damit installierte PWAs nie veralteten Code ausliefern bekommen.
+node "$(git rev-parse --show-toplevel)/scripts/bump-sw-version.mjs" || exit 1
+git add js/sw-config.js
