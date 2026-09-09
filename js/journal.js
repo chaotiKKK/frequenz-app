@@ -112,11 +112,21 @@ const Journal = (() => {
     }
     // Häufigster gewinnt; Gleichstand: Map erhält Einfügereihenfolge,
     // und Einträge liegen neueste-zuerst im Array -> der neuere Wert gewinnt.
-    let topTarget = null, topFreq = null;
+    let topTarget = null, topFreq = null, topCatchMode = null;
     for (const [k, v] of targetCount) if (v === Math.max(...targetCount.values())) { topTarget = k; break; }
     for (const [k, v] of freqCount) if (v === Math.max(...freqCount.values())) { topFreq = k; break; }
     if (entries.length === 0) { topTarget = null; topFreq = null; }
-    return { totalMs, topTarget, topFreq, catchesPerDay: catchesLast7Days(entries, (nowMs !== undefined) ? nowMs : nowFn()) };
+
+    // Effektivster Modus: Fänge pro Wiedergabemodus summieren.
+    // Gleichstand wie oben: neuere Einträge liegen zuerst.
+    const modeCatches = new Map();
+    for (const e of entries) {
+      const c = e.catches || 0;
+      if (c > 0) modeCatches.set(e.mode, (modeCatches.get(e.mode) || 0) + c);
+    }
+    for (const [k, v] of modeCatches) if (v === Math.max(...modeCatches.values())) { topCatchMode = k; break; }
+
+    return { totalMs, topTarget, topFreq, topCatchMode, catchesPerDay: catchesLast7Days(entries, (nowMs !== undefined) ? nowMs : nowFn()) };
   }
 
   /* ---------- CSV ---------- */

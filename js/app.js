@@ -526,6 +526,8 @@ function renderJournalStats() {
   const t = TARGETS.find(x => x.id === s.topTarget);
   $("statTopTarget").textContent = t ? `${t.icon} ${t.name}` : "—";
   $("statTopFreq").textContent = (s.topFreq !== null) ? hzLabel(s.topFreq) : "—";
+  $("statTopCatchMode").textContent =
+    s.topCatchMode ? (MODE_LABELS[s.topCatchMode] || s.topCatchMode) : "—";
   const bars = $("statBars");
   bars.innerHTML = "";
   const maxC = Math.max(1, ...s.catchesPerDay.map(d => d.catches));

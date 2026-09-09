@@ -283,6 +283,40 @@ test("stats: topFreq bevorzugt bei Gleichstand den neueren Eintrag", () => {
   assert.equal(s.topFreq, 200, "Gleichstand: neuerer Eintrag gewinnt");
 });
 
+test("stats: topCatchMode gruppiert Fänge nach Modus, Gleichstand neuerer gewinnt", () => {
+  const Journal = makeJournal(makeStore(), makeClock());
+  const t0 = 1_700_000_000_000;
+  // 3 Fänge im enrich-Modus, 1 im repel-Modus
+  Journal.startEntry({ target: "muecken", mode: "enrich", freq: 480, pattern: "constant" }, t0);
+  Journal.addCatch(); Journal.addCatch(); Journal.addCatch();
+  Journal.stopActive(t0 + 5000);
+  Journal.startEntry({ target: "hunde", mode: "repel", freq: 22000, pattern: "sweep" }, t0 + 10_000);
+  Journal.addCatch();
+  Journal.stopActive(t0 + 12_000);
+  let s = Journal.stats();
+  assert.equal(s.topCatchMode, "enrich");
+
+  // Gleichstand 1:1 — der neuere Eintrag (repel, gestoppt später) gewinnt
+  const Journal2 = makeJournal(makeStore(), makeClock());
+  Journal2.startEntry({ target: "a", mode: "enrich", freq: 100, pattern: "constant" }, t0);
+  Journal2.addCatch();
+  Journal2.stopActive(t0 + 2000);
+  Journal2.startEntry({ target: "b", mode: "repel", freq: 200, pattern: "constant" }, t0 + 5000);
+  Journal2.addCatch();
+  Journal2.stopActive(t0 + 8000);
+  s = Journal2.stats();
+  assert.equal(s.topCatchMode, "repel", "Gleichstand: neuerer Eintrag gewinnt");
+});
+
+test("stats: topCatchMode ist null ohne Fänge", () => {
+  const Journal = makeJournal(makeStore(), makeClock());
+  const t0 = 1_700_000_000_000;
+  Journal.startEntry({ target: "hunde", mode: "repel", freq: 22000, pattern: "sweep" }, t0);
+  Journal.stopActive(t0 + 5000);   // Wiedergabe ohne Fänge
+  const s = Journal.stats();
+  assert.equal(s.topCatchMode, null);
+});
+
 test("stats: catchesPerDay = letzte 7 Kalendertage inkl. heute, ohne Fänge 0", () => {
   const Journal = makeJournal(makeStore(), makeClock());
   // 12:00 Ortszeit vor 3 Tagen und heute — Kalender-, keine 24h-Tage
