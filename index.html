@@ -217,6 +217,24 @@
       </div>
     </div>
     <p class="hint" id="journalEmpty">Noch keine Wiedergaben — starte einen Ton, und er erscheint hier.</p>
+    <div class="journal-stats hidden" id="journalStats">
+      <div class="stat-cell">
+        <span class="stat-label">Gesamtspielzeit</span>
+        <span class="stat-value j-hz" id="statTotal">0:00:00</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-label">Häufigstes Ziel</span>
+        <span class="stat-value" id="statTopTarget">—</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-label">Lieblingsfrequenz</span>
+        <span class="stat-value j-hz" id="statTopFreq">—</span>
+      </div>
+      <div class="stat-cell stat-catches">
+        <span class="stat-label">Fänge / Tag (7 Tage)</span>
+        <span class="stat-bars" id="statBars"></span>
+      </div>
+    </div>
     <div class="journal-wrap hidden" id="journalWrap">
       <table class="journal-table">
         <thead>

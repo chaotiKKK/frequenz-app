@@ -73,6 +73,52 @@ const Journal = (() => {
     try { localStorage.removeItem(KEY); } catch (e) {}
   }
 
+  /* ---------- Statistik (pure, testbar) ---------- */
+
+  function pad2s(n) { return String(n).padStart(2, "0"); }
+
+  function dayKey(ms) {
+    const d = new Date(ms);
+    return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;   // ortsfester Kalendertag
+  }
+
+  /* Letzte 7 Kalendertage inkl. "heute" (nowMs). Tage ohne Fänge = 0. */
+  function catchesLast7Days(entries, nowMs) {
+    const byDay = new Map();
+    for (const e of entries) {
+      if (!e.catches) continue;
+      const k = dayKey(e.startedAt);
+      byDay.set(k, (byDay.get(k) || 0) + (e.catches || 0));
+    }
+    const out = [];
+    for (let i = 6; i >= 0; i--) {
+      const ms = nowMs - i * 86_400_000;
+      const d = new Date(ms);
+      const k = dayKey(ms);
+      out.push({ date: `${pad2s(d.getDate())}.${pad2s(d.getMonth() + 1)}.`, catches: byDay.get(k) || 0 });
+    }
+    return out;
+  }
+
+  function stats(nowMs) {
+    const entries = load();
+    let totalMs = 0;
+    const targetCount = new Map();
+    const freqCount = new Map();
+    for (const e of entries) {
+      totalMs += e.durationMs || 0;
+      targetCount.set(e.target, (targetCount.get(e.target) || 0) + 1);
+      freqCount.set(e.freq, (freqCount.get(e.freq) || 0) + 1);
+    }
+    // Häufigster gewinnt; Gleichstand: Map erhält Einfügereihenfolge,
+    // und Einträge liegen neueste-zuerst im Array -> der neuere Wert gewinnt.
+    let topTarget = null, topFreq = null;
+    for (const [k, v] of targetCount) if (v === Math.max(...targetCount.values())) { topTarget = k; break; }
+    for (const [k, v] of freqCount) if (v === Math.max(...freqCount.values())) { topFreq = k; break; }
+    if (entries.length === 0) { topTarget = null; topFreq = null; }
+    return { totalMs, topTarget, topFreq, catchesPerDay: catchesLast7Days(entries, (nowMs !== undefined) ? nowMs : nowFn()) };
+  }
+
   /* ---------- CSV ---------- */
 
   function csvCell(v) {
@@ -110,5 +156,5 @@ const Journal = (() => {
     return "\uFEFF" + rows.join("\r\n");
   }
 
-  return { startEntry, stopActive, addCatch, getEntries, clear, toCSV };
+  return { startEntry, stopActive, addCatch, getEntries, clear, toCSV, stats };
 })();

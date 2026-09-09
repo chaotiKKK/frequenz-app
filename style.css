@@ -484,6 +484,66 @@ canvas {
 }
 .learn-note.learn-active { color: var(--lichen); }
 
+/* ---------- Journal-Statistik ---------- */
+.journal-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.stat-cell {
+  background: var(--color-card-deep);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.stat-label {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--color-on-card-muted);
+}
+.stat-value { font-size: 20px; font-weight: 600; color: var(--color-on-card); }
+.stat-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  height: 44px;
+}
+.stat-bar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+  min-width: 0;
+}
+.stat-bar-fill {
+  width: 100%;
+  background: var(--moth);
+  border-radius: 2px 2px 0 0;
+  min-height: 2px;
+  transition: height .3s ease-out;
+}
+.stat-bar-label {
+  font-family: var(--mono);
+  font-size: 8.5px;
+  color: var(--color-on-card-muted);
+  margin-top: 3px;
+  white-space: nowrap;
+}
+.stat-bar-num {
+  font-family: var(--mono);
+  font-size: 9px;
+  color: var(--color-on-card);
+  line-height: 1.1;
+}
+
 /* ---------- Sound-Journal ---------- */
 .journal .modebtns .menr, .journal .modebtns .stopbtn { min-width: 150px; }
 .journal-wrap { overflow-x: auto; }

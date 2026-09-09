@@ -234,3 +234,70 @@ test("toCSV maskiert Semikolons in Feldwerten", () => {
   const line = Journal.toCSV().split(/\r?\n/).filter(Boolean)[1];
   assert.ok(line.includes('"ei;sel"'), "Semikolon-Feld sollte in Anführungszeichen stehen");
 });
+
+/* ---------- Statistik-Kachel ---------- */
+
+test("stats: leeres Journal liefert Nullen und null-Topwerte", () => {
+  const Journal = makeJournal(makeStore(), makeClock());
+  const s = Journal.stats();
+  assert.equal(s.totalMs, 0);
+  assert.equal(s.topTarget, null);
+  assert.equal(s.topFreq, null);
+  assert.equal(s.catchesPerDay.length, 7);
+  assert.ok(s.catchesPerDay.every(d => d.catches === 0), "leere Tage = 0 Fänge");
+});
+
+test("stats: Gesamtspielzeit summiert alle Dauern", () => {
+  const Journal = makeJournal(makeStore(), makeClock());
+  const t0 = 1_700_000_000_000;
+  Journal.startEntry({ target: "hunde", mode: "repel", freq: 22000, pattern: "sweep" }, t0);
+  Journal.stopActive(t0 + 30_000);            // 30 s
+  Journal.startEntry({ target: "muecken", mode: "enrich", freq: 480, pattern: "constant" }, t0 + 60_000);
+  Journal.stopActive(t0 + 90_500);            // 30,5 s
+  const s = Journal.stats();
+  assert.equal(s.totalMs, 60_500);
+});
+
+test("stats: topTarget ist das häufigste Ziel, topFreq der häufigste Wert", () => {
+  const Journal = makeJournal(makeStore(), makeClock());
+  const t0 = 1_700_000_000_000;
+  Journal.startEntry({ target: "hunde", mode: "repel", freq: 22000, pattern: "sweep" }, t0);
+  Journal.stopActive(t0 + 5000);
+  Journal.startEntry({ target: "hunde", mode: "repel", freq: 22000, pattern: "sweep" }, t0 + 10_000);
+  Journal.stopActive(t0 + 15_000);
+  Journal.startEntry({ target: "muecken", mode: "enrich", freq: 480, pattern: "constant" }, t0 + 20_000);
+  Journal.stopActive(t0 + 25_000);
+  const s = Journal.stats();
+  assert.equal(s.topTarget, "hunde");                    // 2× hunde, 1× muecken
+  assert.equal(s.topFreq, 22000);                        // 2× 22000, 1× 480
+});
+
+test("stats: topFreq bevorzugt bei Gleichstand den neueren Eintrag", () => {
+  const Journal = makeJournal(makeStore(), makeClock());
+  const t0 = 1_700_000_000_000;
+  Journal.startEntry({ target: "a", mode: "repel", freq: 100, pattern: "constant" }, t0);
+  Journal.stopActive(t0 + 2000);
+  Journal.startEntry({ target: "b", mode: "repel", freq: 200, pattern: "constant" }, t0 + 5000);
+  Journal.stopActive(t0 + 8000);
+  const s = Journal.stats();
+  assert.equal(s.topFreq, 200, "Gleichstand: neuerer Eintrag gewinnt");
+});
+
+test("stats: catchesPerDay = letzte 7 Kalendertage inkl. heute, ohne Fänge 0", () => {
+  const Journal = makeJournal(makeStore(), makeClock());
+  // 12:00 Ortszeit vor 3 Tagen und heute — Kalender-, keine 24h-Tage
+  const t0 = 1_700_000_000_000;                          // 2023-11-14 (UTC-abhängig ortsfest)
+  const day = 86_400_000;
+  Journal.startEntry({ target: "muecken", mode: "enrich", freq: 480, pattern: "constant" }, t0);
+  Journal.stopActive(t0 + 5000);
+  Journal.addCatch();                                    // zählt nur aktiv — hier schon vorbei
+  // Neue Wiedergabe heute, zwei Fänge:
+  Journal.startEntry({ target: "muecken", mode: "enrich", freq: 480, pattern: "constant" }, t0 + 5 * day);
+  Journal.addCatch(); Journal.addCatch();
+  Journal.stopActive(t0 + 5 * day + 10_000);
+  const s = Journal.stats(t0 + 5 * day + 20_000);
+  assert.equal(s.catchesPerDay.length, 7);
+  assert.equal(s.catchesPerDay[6].catches, 2, "heute: 2 Fänge");
+  assert.equal(s.catchesPerDay[3].catches, 0, "der Tag ohne eigenen Fang bleibt 0");
+  assert.ok(s.catchesPerDay.every(d => /^\d{2}\.\d{2}\.$/.test(d.date)), "Datumsformat DD.MM.");
+});

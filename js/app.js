@@ -454,6 +454,7 @@ function renderJournal() {
   $("journalCount").textContent = entries.length + " Einträge";
   $("journalEmpty").classList.toggle("hidden", entries.length > 0);
   $("journalWrap").classList.toggle("hidden", entries.length === 0);
+  renderJournalStats();
   const body = $("journalBody");
   body.innerHTML = "";
   const max = 50;               // Tabelle zeigt die 50 neuesten; CSV alles
@@ -467,6 +468,36 @@ function renderJournal() {
       `<td>${journalPattern(e.pattern)}</td>` +
       `<td class="j-hz">${fmtHMS(e.durationMs)}</td>`;
     body.appendChild(tr);
+  }
+}
+
+function renderJournalStats() {
+  const s = Journal.stats();
+  const box = $("journalStats");
+  const empty = Journal.getEntries().length === 0;
+  box.classList.toggle("hidden", empty);
+  if (empty) return;
+  $("statTotal").textContent = fmtHMS(s.totalMs);
+  const t = TARGETS.find(x => x.id === s.topTarget);
+  $("statTopTarget").textContent = t ? `${t.icon} ${t.name}` : "—";
+  $("statTopFreq").textContent = (s.topFreq !== null) ? hzLabel(s.topFreq) : "—";
+  const bars = $("statBars");
+  bars.innerHTML = "";
+  const maxC = Math.max(1, ...s.catchesPerDay.map(d => d.catches));
+  for (const d of s.catchesPerDay) {
+    const wrap = document.createElement("span");
+    wrap.className = "stat-bar";
+    const num = document.createElement("span");
+    num.className = "stat-bar-num";
+    num.textContent = d.catches || "";
+    const fill = document.createElement("span");
+    fill.className = "stat-bar-fill";
+    fill.style.height = Math.round((d.catches / maxC) * 30) + "px";  // max 30 px Balken
+    const label = document.createElement("span");
+    label.className = "stat-bar-label";
+    label.textContent = d.date.slice(0, -1);                          // "09.09" statt "09.09."
+    wrap.append(num, fill, label);
+    bars.appendChild(wrap);
   }
 }
 
