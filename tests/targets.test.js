@@ -130,13 +130,15 @@ test("jedes Ziel mit beiden Modi hat für jeden Modus einen desc-Text", () => {
   }
 });
 
-test("Hörbereiche: vier Arten, plausible Grenzen, Farben gesetzt", () => {
-  assert.equal(HEARING_RANGES.length, 4, "vier Hörbereiche erwartet");
+test("Hörbereiche: sieben Arten, plausible Grenzen, Farben gesetzt", () => {
+  assert.equal(HEARING_RANGES.length, 7, "sieben Hörbereiche erwartet");
   for (const r of HEARING_RANGES) {
     assert.ok(r.label, "label fehlt");
     assert.ok(r.color && /^#[0-9A-Fa-f]{6}$/.test(r.color), `Farbe fehlt/ungültig bei ${r.label}`);
     assert.ok(r.from < r.to, `from >= to bei ${r.label}`);
-    assert.ok(r.from >= F_MIN / 10 && r.to <= F_MAX, `${r.label}: Grenzen unplausibel`);
+    // Hören geht über die Spiel-Grenze hinaus (Katze 85 kHz, Ratte 80–90 kHz):
+    // das Diagramm clippt an F_MAX, der Test erlaubt bis 90 kHz.
+    assert.ok(r.from >= F_MIN / 10 && r.to <= 90000, `${r.label}: Grenzen unplausibel`);
   }
 });
 
@@ -151,6 +153,40 @@ test("Mensch-Hörbereich deckt hörbare Presets ab, Mücken-Band enthält den Lo
   assert.ok(insekt.from <= 400 && insekt.to >= 600, "Mücken-Band enthält den Lockton nicht");
 });
 
-test("Hörbereiche bleiben auf die 4 Tier-Bänder beschränkt (Materialien hören nicht)", () => {
-  assert.equal(HEARING_RANGES.length, 4, "Materialien dürfen keine Hörbereich-Zeile bekommen");
+test("Hörbereiche bleiben auf die 7 Tier-Bänder beschränkt (Materialien hören nicht)", () => {
+  assert.equal(HEARING_RANGES.length, 7, "Materialien dürfen keine Hörbereich-Zeile bekommen");
+});
+
+test("Katze-Band: 48 Hz – 80 kHz (Heffner 1985), deckt Schnurr- und Pfeifbänder ab", () => {
+  const katze = HEARING_RANGES.find(r => r.label.startsWith("Katze"));
+  assert.ok(katze, "Katze-Band fehlt");
+  assert.ok(katze.from <= 100 && katze.to >= 80000, "Katze-Band sollte ~48 Hz bis >= 80 kHz abdecken");
+  assert.ok(katze.from <= 120 && katze.to >= 200, "Katze-Band enthält den Schnurr-Akkord (100–200 Hz) nicht");
+});
+
+test("Ratte-Band: ~200 Hz bis 80 kHz, enthält die 50-kHz-USV", () => {
+  const ratte = HEARING_RANGES.find(r => r.label.startsWith("Ratte"));
+  assert.ok(ratte, "Ratte-Band fehlt");
+  assert.ok(ratte.from <= 250 && ratte.to >= 80000, "Ratte-Band sollte ~200/250 Hz bis >= 80 kHz abdecken");
+  assert.ok(ratte.from <= 50000 && ratte.to >= 52000, "Ratte-Band enthält die 50-kHz-USV nicht");
+});
+
+test("Fruchtfliege-Band: eigenes, schmales Band um den Balz-Gesang (~150–300 Hz)", () => {
+  const fliege = HEARING_RANGES.find(r => r.label.includes("Fruchtfliege"));
+  assert.ok(fliege, "Fruchtfliege-Band fehlt");
+  assert.ok(fliege.from <= 150 && fliege.to >= 280, "Fruchtfliege-Band sollte den Balz-Puls (~150–280 Hz) einschließen");
+  // Muss ein EIGENES Band sein, getrennt vom Mücken-Band
+  const muecke = HEARING_RANGES.find(r => r.label.includes("Mücke"));
+  assert.ok(muecke, "Mücken-Band fehlt");
+  assert.ok(fliege.to < muecke.from || fliege.from > muecke.to, "Fruchtfliege und Mücke teilen sich ein Band");
+  // Und breiter als die Balz-Puls-Frequenz selbst (Hören != Singen)
+  assert.ok(fliege.to - fliege.from >= 100, "Fruchtfliege-Band ungewöhnlich schmal");
+});
+
+test("Alle 7 Bänder sind in sich plausibel und überlappen sinnvoll", () => {
+  const sorted = [...HEARING_RANGES].sort((a, b) => a.from - b.from);
+  for (let i = 1; i < sorted.length; i++) {
+    assert.ok(sorted[i].from < sorted[i - 1].to || sorted[i].from < sorted[i].to,
+      `Band ${sorted[i].label} liegt vollständig außerhalb jeder Überlappung`);
+  }
 });

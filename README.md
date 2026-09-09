@@ -54,8 +54,10 @@ wird daraus ein einfaches DIY-Fallen-Experiment.
 - **Spektrum-Analyzer** — log-skaliert, Balken farbcodiert nach Hörbereich
   (Mensch=Grün, Hund=Gelb, Vogel=Violett, Insekt=Pink)
 - **Oszilloskop** — Wellenform des aktuellen Tons
-- **Hörbereichs-Diagramm** — wo Mensch/Tier/Insekt hören, mit wanderndem weißem
-  Marker für den aktuellen Ton
+- **Hörbereichs-Diagramm (Tafel III)** — sieben Art-Bänder mit wanderndem Marker
+  für den aktuellen Ton: Mensch · Hund · Katze (48 Hz–80 kHz, Heffner 1985) ·
+  Ratte (200 Hz–80 kHz, bis 52 kHz spielbar) · Vogel · Mücke (300–800 Hz) ·
+  Fruchtfliege (90–280 Hz, Balz-Gesang — eigenes Band, getrennt von der Mücke)
 
 ## ⚗️ Ehrliche Wissenschaft
 

@@ -43,8 +43,11 @@ function hearersAt(f) {
   const KEY = {
     "Mensch": "mensch",
     "Hund": "hund",
+    "Katze (Heffner 1985)": "katze",
+    "Ratte (USV 50 kHz)": "ratte",
     "Vogel (Sittich)": "vogel",
-    "Insekt (Mücke)": "insekt"
+    "Insekt (Mücke)": "insekt",
+    "Fruchtfliege (Balz-Gesang)": "fliege"
   };
   const out = [];
   for (const r of HEARING_RANGES) {
@@ -64,7 +67,8 @@ const LEARN_DEMOS = {
 let learnTimer = null;          // Intervall der laufenden Demo
 
 const HEARER_LABELS = {
-  mensch: "🧑 du", hund: "🐕 Hund", vogel: "🦜 Vogel", insekt: "🦟 Mücke"
+  mensch: "🧑 du", hund: "🐕 Hund", katze: "🐱 Katze", ratte: "🐀 Ratte",
+  vogel: "🦜 Vogel", insekt: "🦟 Mücke", fliege: "🪰 Fruchtfliege"
 };
 
 function learnComment(f) {

@@ -485,8 +485,11 @@ const TARGETS = [
 
 /* Hörbereiche für das Diagramm (von, bis, Label, Farbe) */
 const HEARING_RANGES = [
-  { from: 150,  to: 800,   label: "Insekt (Mücke)", color: "#E08794" },
-  { from: 200,  to: 8500,  label: "Vogel (Sittich)", color: "#9A8FC9" },
-  { from: 20,   to: 20000, label: "Mensch", color: "#9FB88A" },
-  { from: 40,   to: 45000, label: "Hund", color: "#E0A458" }
+  { from: 90,   to: 280,   label: "Fruchtfliege (Balz-Gesang)", color: "#C77B4F" },
+  { from: 300,  to: 800,   label: "Insekt (Mücke)",             color: "#E08794" },
+  { from: 200,  to: 8500,  label: "Vogel (Sittich)",            color: "#9A8FC9" },
+  { from: 20,   to: 20000, label: "Mensch",                     color: "#9FB88A" },
+  { from: 48,   to: 80000, label: "Katze (Heffner 1985)",       color: "#B98FC0" },
+  { from: 40,   to: 45000, label: "Hund",                       color: "#E0A458" },
+  { from: 200,  to: 80000, label: "Ratte (USV 50 kHz)",         color: "#8FA5B8" }
 ];
