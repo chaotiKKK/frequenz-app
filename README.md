@@ -166,7 +166,8 @@ Design-System-Disziplin ohne Build-Step.
 index.html              Oberfläche (Redesign: Nacht + Papierplatten)
 style.css               Design-System (Tafeln, Typo, Artenfarben)
 js/targets.js           Frequenz-Datenbank + Studien-Hinweise
-js/audio-engine.js      Web-Audio-Engine (Oszillatoren, Sweeps, Not-Aus-Sperre)
+js/audio-engine.js      Web-Audio-Adapter (Voices, Patterns, Not-Aus-Sperre)
+js/engine-logic.js      Reine Engine-Mathematik (Duett, Sweep-Bahn, Akkord, Hüllkurve)
 js/visualizer.js        Messtafeln I–III (Canvas)
 js/app.js               UI-Logik, Fallen-Modus, Timer, Sicherheit
 js/journal.js           Sound-Journal (Logik, CSV, Persistenz)

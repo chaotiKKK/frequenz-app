@@ -1,7 +1,14 @@
 /* ============================================================
    Audio-Engine — Web Audio API
    Sinus/Sweep/Chirps/Akkord + Not-Aus-Sperre
+   Die reine Mathematik (Duett, Sweep-Bahn, Chirp-Jitter, Akkord,
+   Hüllkurve) lebt in js/engine-logic.js und ist dort unit-getestet;
+   dieses Modul ist nur noch der Web-Audio-Adapter.
    ============================================================ */
+
+const EngineLogic = (typeof module !== "undefined" && module.exports)
+  ? require("./engine-logic.js")
+  : window.EngineLogic;
 
 const AudioEngine = (() => {
   let ctx = null;
@@ -87,13 +94,14 @@ const AudioEngine = (() => {
   }
 
   function startSweep() {
+    const { f0, f1, durTotal } = EngineLogic.sweepProfile(currentFreq);
     const osc = ctx.createOscillator();
     const g = ctx.createGain();
     osc.type = currentWave;
     g.gain.setValueAtTime(0.0001, ctx.currentTime);
     g.gain.exponentialRampToValueAtTime(0.9, ctx.currentTime + 0.05);
-    g.gain.setValueAtTime(0.9, ctx.currentTime + 2.95);
-    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 3);
+    g.gain.setValueAtTime(0.9, ctx.currentTime + durTotal - 0.05);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + durTotal);
     osc.connect(g); g.connect(master);
     osc.start();
     voices.push(osc); gains.push(g);
@@ -102,26 +110,22 @@ const AudioEngine = (() => {
       gains = gains.filter(x => x !== g);
     };
 
-    const f0 = Math.max(40, currentFreq / 1.5);
-    const f1 = Math.min(45000, currentFreq * 1.5);
     osc.frequency.setValueAtTime(f0, ctx.currentTime);
-    osc.frequency.linearRampToValueAtTime(f1, ctx.currentTime + 1.5);
-    osc.frequency.linearRampToValueAtTime(f0, ctx.currentTime + 3);
+    osc.frequency.linearRampToValueAtTime(f1, ctx.currentTime + durTotal / 2);
+    osc.frequency.linearRampToValueAtTime(f0, ctx.currentTime + durTotal);
 
-    // Frequenz für Visualizer mitführen
+    // Frequenz für Visualizer mitführen — Bahn aus der reinen sweepFreqAt
     const t = setInterval(() => {
       if (!playing || !voices.includes(osc)) return;
-      const el = (ctx.currentTime - (osc._t0 || (osc._t0 = ctx.currentTime))) % 3;
-      currentFreq = el < 1.5
-        ? f0 + (f1 - f0) * (el / 1.5)
-        : f1 - (f1 - f0) * ((el - 1.5) / 1.5);
+      const t0 = osc._t0 || (osc._t0 = ctx.currentTime);
+      currentFreq = EngineLogic.sweepFreqAt(f0, f1, ctx.currentTime - t0);
     }, 80);
     patternTimers.push(t);
 
     // nahtlos weiterlaufen lassen
     const loop = setInterval(() => {
       if (playing && !voices.includes(osc)) startSweep();
-    }, 3100);
+    }, durTotal * 1000 + 100);
     patternTimers.push(loop, t);
   }
 
@@ -129,34 +133,35 @@ const AudioEngine = (() => {
     makeVoice(currentFreq, ctx.currentTime, 0.09);
     const t = setInterval(() => {
       if (!playing) return;
-      const jitter = currentFreq * (0.92 + Math.random() * 0.16);
+      const jitter = EngineLogic.chirpJitterFreq(currentFreq);
       makeVoice(jitter, ctx.currentTime, 0.07 + Math.random() * 0.06);
     }, 240);
     patternTimers.push(t);
   }
 
   function startChord() {
-    const ratios = [1, 1.25, 1.5];   // Dur-Terz + Quinte
-    ratios.forEach((r, i) => {
-      makeVoice(currentFreq * r, ctx.currentTime + i * 0.03, 1.2);
+    const tones = EngineLogic.chordFreqs(currentFreq);
+    tones.forEach((f, i) => {
+      makeVoice(f, ctx.currentTime + i * 0.03, 1.2);
     });
     const t = setInterval(() => {
       if (!playing) return;
-      ratios.forEach((r, i) => {
-        makeVoice(currentFreq * r, ctx.currentTime + i * 0.03, 1.25);
+      tones.forEach((f, i) => {
+        makeVoice(f, ctx.currentTime + i * 0.03, 1.25);
       });
     }, 1250);
     patternTimers.push(t);
   }
 
-  /* Duett: zwei Dauerton-Voices gleichzeitig (Weibchen + Männchen 1,25×) */
+  /* Duett: zwei Dauerton-Voices gleichzeitig (Weibchen + Männchen) —
+     Intervall-Berechnung aus EngineLogic.duetFreqs */
   function playDuet(freq) {
     if (locked) return false;
     ensureCtx();
     stopAll(true);
     currentFreq = freq;
     playing = true;
-    const [fW, fM] = [freq, Math.round(freq * 1.25)];
+    const [fW, fM] = EngineLogic.duetFreqs(freq);
     makeVoice(fW, ctx.currentTime, 1);
     makeVoice(fM, ctx.currentTime, 1);
     const t = setInterval(() => {

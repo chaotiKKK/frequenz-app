@@ -4,7 +4,7 @@
    ============================================================ */
 
 const SW_CACHE = (() => {
-  const VERSION = "v2";
+  const VERSION = "v3";
   const NAME = "frequenz-app-" + VERSION;
 
   const precache = [
@@ -12,6 +12,7 @@ const SW_CACHE = (() => {
     "style.css",
     "manifest.webmanifest",
     "js/sw-config.js",
+    "js/engine-logic.js",
     "js/targets.js",
     "js/journal.js",
     "js/audio-engine.js",
